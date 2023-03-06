@@ -3,7 +3,7 @@ const postController = require('../controllers/postController');
 
 const router = express.Router();
 
-// router.param('id', postController.checkID);
+
 
 router
   .route('/top-5-cheap')

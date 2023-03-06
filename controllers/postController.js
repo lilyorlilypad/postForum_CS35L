@@ -1,5 +1,7 @@
 const post = require('./../models/postModel');
 const APIFeatures = require('../utils/apiFeatures');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 
 exports.aliasTopposts = (req, res, next) => {
   req.query.limit = '5';
@@ -8,115 +10,88 @@ exports.aliasTopposts = (req, res, next) => {
   next();
 };
 
-exports.getAllposts = async (req, res) => {
-  try {
-    // EXECUTE QUERY
-    const features = new APIFeatures(post.find(), req.query)
-      .filter()
-      .sort()
-      .limitFields()
-      .paginate();
-    const posts = await features.query;
+exports.getAllposts = catchAsync(async (req, res, next) => {
+  const features = new APIFeatures(post.find(), req.query)
+    .filter()
+    .sort()
+    .limitFields()
+    .paginate();
+  const posts = await features.query;
+  // SEND RESPONSE
+  res.status(200).json({
+    status: 'success',
+    results: posts.length,
+    data: {
+      posts
+    }
+  });
+});
 
-    // SEND RESPONSE
-    res.status(200).json({
-      status: 'success',
-      results: posts.length,
-      data: {
-        posts
-      }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
-
-exports.getpost = async (req, res) => {
-  try {
+exports.getpost = catchAsync(async (req, res, next) => {
     const post = await post.findById(req.params.id);
-    // post.findOne({ _id: req.params.id })
+
+    if (!post) {
+      return next(new AppError('No tour found with that ID', 404));
+    }
 
     res.status(200).json({
       status: 'success',
       data: {
         post
       }
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+  });
+});
 
-exports.createpost = async (req, res) => {
-  try {
-    // const newpost = new post({})
-    // newpost.save()
 
-    const newpost = await post.create(req.body);
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        post: newpost
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+exports.createpost = catchAsync(async (req, res, next) => {
+  const newpost = await post.create(req.body);
 
-exports.updatepost = async (req, res) => {
-  try {
+  res.status(201).json({
+    status: 'success',
+    data: {
+      post: newpost
+    }
+  });
+});
+
+exports.updatepost = catchAsync(async (req, res, next) => {
     const post = await post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
 
+    if (!post){
+      return next(new AppError('No Post Found with id', 404));
+    }
+
     res.status(200).json({
       status: 'success',
       data: {
         post
       }
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
 
-exports.deletepost = async (req, res) => {
-  try {
-    await post.findByIdAndDelete(req.params.id);
+});
 
-    res.status(204).json({
-      status: 'success',
-      data: null
-    });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+exports.deletepost = catchAsync(async (req, res) => {
+  const post = await post.findByIdAndDelete(req.params.id);
 
-exports.getpostStats = async (req, res) => {
-  try {
-    const stats = await post.aggregate([
-      {
-        $match: { ratingsAverage: { $gte: 4.5 } }
-      },
+  if (!post) {
+    return next(new AppError('No Post Found with id', 404));
+  };
+
+  res.status(204).json({
+    status: 'success',
+    data: null
+  });
+});
+
+exports.getpostStats = catchAsync(async (req, res, next) => {
+  const stats = await post.aggregate([
+    {
+     $match: { ratingsAverage: { $gte: 4.5 } }
+    },
       {
         $group: {
           _id: { $toUpper: '$difficulty' },
@@ -131,9 +106,6 @@ exports.getpostStats = async (req, res) => {
       {
         $sort: { avgPrice: 1 }
       }
-      // {
-      //   $match: { _id: { $ne: 'EASY' } }
-      // }
     ]);
 
     res.status(200).json({
@@ -142,16 +114,9 @@ exports.getpostStats = async (req, res) => {
         stats
       }
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+});
 
-exports.getMonthlyPlan = async (req, res) => {
-  try {
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     const year = req.params.year * 1; // 2021
 
     const plan = await post.aggregate([
@@ -195,10 +160,4 @@ exports.getMonthlyPlan = async (req, res) => {
         plan
       }
     });
-  } catch (err) {
-    res.status(404).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+});
