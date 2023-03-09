@@ -6,7 +6,7 @@ var bodyParser = require('body-parser');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController.js');
 const postRouter = require('./routes/postRoutes');
-const userRouter = require('./routes/userRoutes');
+const router = require('./routes/routes');
 
 //initialise for comment feature
 var Pusher = require('pusher');
@@ -21,6 +21,9 @@ var pusher = new Pusher({
 
 const app = express();
 
+//specify folder with static resources
+app.use(express.static('resources/'));
+
 // 1) MIDDLEWARES
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
@@ -29,14 +32,22 @@ if (process.env.NODE_ENV === 'development') {
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));
 
+
+
 app.use((req, res, next) => {
   req.requestTime = new Date().toISOString();
   next();
 });
 
 // 3) ROUTES
-app.use('/api/v1/posts', postRouter);
-app.use('/api/v1/users', userRouter);
+//app.use('/api/v1/posts', postRouter);
+app.use('/', router);
+app.use('/search', router);
+app.use('/post', router);
+app.use('/createPost', router);
+//app.use('/api/v1/users', userRouter);
+
+
 
 app.all('*', (req, res, next) => {
   // res.status(404).json({
@@ -49,8 +60,10 @@ app.all('*', (req, res, next) => {
   next(err);
 });
 
+
+
 //middleware -> error handling
-app.use(globalErrorHandler);
+//app.use(globalErrorHandler);
 
 //comment feature
 app.use(bodyParser.json());

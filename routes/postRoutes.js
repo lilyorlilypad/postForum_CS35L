@@ -10,13 +10,15 @@ router
   .get(postController.aliasTopposts, postController.getAllposts);
 
 router.route('/post-stats').get(postController.getpostStats);
+
 router.route('/monthly-plan/:year').get(postController.getMonthlyPlan);
 
+/*
 router
   .route('/')
   .get(postController.getAllposts)
   .post(postController.createpost);
-
+*/
 router
   .route('/:id')
   .get(postController.getpost)

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css"
+    />
+    <title>Market</title>
+    <link rel="stylesheet" href="./css/reset.css">
+    <link rel="stylesheet" href="./css/index.css">
+</head>
+<body>
+    <!--Header Implementation-->
+    <div class="header">
+        <div class="wrap header-box">
+            <div class="search">
+                <div class="search-m">
+                    <form class="form" method="post" action="/search">
+                        <input type="text" class="search-keyword" placeholder="Notes">
+                        <button name="search"><i class="bi bi-search"></i></button>
+                        <div class="search-helper"></div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--Carousel implementation-->
+    <div class="banner">
+        <div class="wrap banner-box">
+            <div class="banner-slide">
+                <a href="#">
+                    <img class="img" src="./images/images1.jpeg" alt="">
+                </a>
+
+                <a href="#" class="prev"><i class="bi bi-chevron-left"></i></a>
+                <a href="#" class="next"><i class="bi bi-chevron-right"></i></a>
+                <ul class="banner-point">
+                    <li class="active"></li>
+                    <li></li>
+                    <li></li>
+                </ul>
+            </div>
+        </div>
+    </div> 
+
+    <!--Content implementation-->
+    <form value="Make a post" method="get" action="/post">
+        <button>Make a post</button>
+    </form>
+    <script src="./js/index.js"></script>
+</body>
+</html>

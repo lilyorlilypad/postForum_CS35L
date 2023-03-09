@@ -42,9 +42,17 @@ exports.getpost = catchAsync(async (req, res, next) => {
   });
 });
 
+exports.createPost = (req, res, next) => {
+  const newPost = new post({
+    name: req.name,
+    
+  })
+  res.send("HI");
+}
 
 
-exports.createpost = catchAsync(async (req, res, next) => {
+/*
+exports.createPost = catchAsync(async (req, res, next) => {
   const newpost = await post.create(req.body);
 
   res.status(201).json({
@@ -52,9 +60,9 @@ exports.createpost = catchAsync(async (req, res, next) => {
     data: {
       post: newpost
     }
-  });
-});
-
+  });})
+;
+*/
 exports.updatepost = catchAsync(async (req, res, next) => {
     const post = await post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
