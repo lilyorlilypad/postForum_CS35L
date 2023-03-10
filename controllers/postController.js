@@ -11,13 +11,18 @@ exports.aliasTopposts = (req, res, next) => {
 };
 
 exports.getAllposts = catchAsync(async (req, res, next) => {
+  /*
   const features = new APIFeatures(post.find(), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
-  const posts = await features.query;
+    */
+  //const posts = await features.query;
   // SEND RESPONSE
+
+  post.find()
+
   res.status(200).json({
     status: 'success',
     results: posts.length,
@@ -27,7 +32,8 @@ exports.getAllposts = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.getpost = catchAsync(async (req, res, next) => {
+exports.getpost = catchAsync(async(req, res, next) => {
+
     const post = await post.findById(req.params.id);
 
     if (!post) {
@@ -42,27 +48,7 @@ exports.getpost = catchAsync(async (req, res, next) => {
   });
 });
 
-exports.createPost = (req, res, next) => {
-  const newPost = new post({
-    name: req.name,
-    
-  })
-  res.send("HI");
-}
 
-
-/*
-exports.createPost = catchAsync(async (req, res, next) => {
-  const newpost = await post.create(req.body);
-
-  res.status(201).json({
-    status: 'success',
-    data: {
-      post: newpost
-    }
-  });})
-;
-*/
 exports.updatepost = catchAsync(async (req, res, next) => {
     const post = await post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

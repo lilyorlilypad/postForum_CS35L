@@ -4,28 +4,32 @@ const path = require('path');
 
 //link controllers
 const userController = require('../controllers/userController.js');
-const viewController = require('../controllers/viewController.js');
+const controller = require('../controllers/controller.js');
 const postController = require('../controllers/postController.js');
 
 
 router
   .route('/')
-  .get(viewController.base);
+  .get(controller.base);
   //.get(userController.getAllUsers)
   //.post(userController.createUser);
 
 
 router
   .route('/search')
-  .post(viewController.search);
+  .get(controller.searchPage);
+
+router
+  .route('/query')
+  .get(controller.search);
 
 router
   .route('/post')
-  .get(viewController.post);
+  .get(controller.post);
 
 router
   .route('/createPost')
-  .post(postController.createPost);
+  .post(controller.createPost);
 
 router
   .route('/:id')
