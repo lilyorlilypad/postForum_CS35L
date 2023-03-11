@@ -1,0 +1,115 @@
+@tailwind base;
+@tailwind component;
+@tailwind utilities;
+
+
+img {
+    max-width: 100%;
+}
+
+ul {
+    list-style: none;
+}
+
+body {
+    margin-top: 60px;
+}
+
+
+.productPage{
+    background-color: white;
+    border: 1px solid #ececec;
+    box-shadow: 0 10px 40px -30px black;
+    border-radius: 10px;
+    width: 800px;
+  }
+
+  .likeContainer{
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  .likeContainer .likeButton {
+    border: 1px solid black;
+    padding: 8px 25px;
+    justify-content: center;
+    border-radius: 5px;
+  
+  }
+  
+  .commentSection .identifier {
+    margin-top: 30px;
+    padding: 5px;
+    /* border: 1px solid green; */
+    display: flex;
+  }
+
+  .commentSection .identifier .userImage{
+    width: 55px !important;
+    height: 50px !important;
+    border: 5px purple;
+  }
+
+
+  .commentSection .identifier .formElement{
+    width: 100%;
+    padding: 10px;
+    margin-left: 14px;
+    border: 1px solid black;
+    border-radius: 5px;
+  }
+
+
+  .commentSection .sendContainer {
+    margin-top: 12px;
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .commentSection .sendContainer .commentButton {
+
+    border: 1px solid black;
+    padding: 10px;
+    display: flex;
+    justify-content: flex-end;
+    border-radius: 5px;
+    border-width: 30%;
+
+  }
+
+
+.comments{
+  margin-top: 10px;
+  border: 1px solid transparent;
+  /* background-color:#fcfbfb; */
+  display: flex;
+  margin-bottom: 20px;
+}
+
+#commentList li {
+  /* display: flex; */
+  margin-top: 25px;
+}
+
+
+.comments .userComment {
+  display: flex;
+}
+
+.comments .userComment .commentImage {
+  width: 55px !important;
+  height: 50px !important;
+  border: 1px;
+  border-radius: 9999px;
+}
+  
+.comments .commentWords {
+  margin-left: 14px;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  background-color: #E5E4E2;
+  justify-content: flex-start;
+  min-width: min-content;
+  padding: 10px;
+}
