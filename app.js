@@ -9,16 +9,7 @@ const globalErrorHandler = require('./controllers/errorController.js');
 const postRouter = require('./routes/postRoutes');
 const router = require('./routes/routes');
 
-//initialise for comment feature
-var Pusher = require('pusher');
 
-var pusher = new Pusher({
-  appId: '1565426',
-  key: '100c97a2a597d4ced484',
-  secret: '31f44ab12469d7b10481',
-  cluster: 'us2',
-  encrypted: true
-});
 
 const app = express();
 

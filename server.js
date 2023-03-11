@@ -13,6 +13,19 @@ const app = require('./app');
 
 const DB = process.env.DATABASE;
 
+//implementing comment feature
+
+//define a schema for the comments
+const commentSchema = new mongoose.Schema({
+  name: String,
+  email: String,
+  message: String
+});
+
+//Create a mongoose model for the comments
+const Comment = mongoose.model('Comment', commentSchema);
+
+//connect to MongoDB
 mongoose
   .connect(DB, {
     useNewUrlParser: true,
@@ -21,17 +34,6 @@ mongoose
   })
   .then(() => console.log('DB connection successful!'));
 
-//related to comment feature
-app.post('/comment', function(req, res){
-  console.log(req.body);
-  var newComment = {
-    name: req.body.name,
-    email: req.body.email,
-    comment: req.body.comment
-  }
-  pusher.trigger('flash-comments', 'new_comment', newComment);
-  res.json({ created: true });
-});
 
 const port = process.env.PORT || 3000;
 
