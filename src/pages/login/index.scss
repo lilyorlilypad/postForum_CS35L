@@ -1,0 +1,74 @@
+.login {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 1.5rem;
+    .loginPage{
+        background-color: white;
+        border: 1px solid #ececec;
+        box-shadow: 0 10px 40px -30px black;
+        border-radius: 10px;
+        width: 800px;
+    }
+    .loginPage .row{
+        padding: 50px;
+        text-align: center;
+    }
+    .loginPage .row span{
+        text-decoration: none;
+        display: inline-block;
+        font-size: 17px;
+        font-weight: 600;
+        border: 2px solid black;
+        border-radius: 20px;
+        color: black;
+        padding: 8px 10px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .loginPage .row span:hover{
+        color: #6f7574;
+        border-color: #6f7574;
+    }
+    
+    .loginPage .hrLine{
+        position: relative;
+        border-bottom: 1px solid #dfdfdf;
+    }
+    
+    .loginPage h1, p, h3{
+        margin-bottom: 10px;
+    }
+    .loginPage .formElement .username{
+        width: 100%;
+        padding: 18px 15px;
+        margin: 5px;
+    }
+    .loginPage .formElement .password{
+        width: 100%;
+        padding: 18px 15px;
+        margin: 5px;
+    }
+    
+    .loginPage .loginForm button {
+        color: white;
+        background-color: black;
+        font-size: 17px;
+        border: none;
+        border-radius: 30px;
+        padding: 15px 30px;
+        margin-top: 20px;
+        cursor: pointer;
+        transition: all 0.2s;
+    }
+    .loginPage .loginForm button:hover{
+        background-color: #525151;
+    }
+    
+    @media (max-width: 900px){
+        .loginPage{
+            width: 500px;
+        }
+    }
+}
