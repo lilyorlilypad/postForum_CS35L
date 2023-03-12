@@ -5,6 +5,8 @@ import './assets/reset.css'
 const Home = React.lazy(() => import('./pages/home'))
 const Login = React.lazy(() => import('./pages/login'))
 const SignUp = React.lazy(() => import('./pages/signUp'))
+const Product = React.lazy(() => import('./pages/product'))
+const SearchResult = React.lazy(() => import('./pages/searchResultPage'))
 
 function App() {
   return (
@@ -16,6 +18,8 @@ function App() {
             <Route path='/login' component={Login}></Route>
             <Route path='/home' component={Home}></Route>
             <Route path='/signUp' component={SignUp}></Route>
+            <Route path='/product' component={Product}></Route>
+            <Route path='/search' component={SearchResult}></Route> {/* Might need to change this later */}
           </Switch>
         </Suspense>
       </div>
