@@ -45,7 +45,7 @@ export default class Home extends Component {
                             <div className="search-m">
                                 <div className="form">
                                     <input type="text" className="search-keyword" placeholder="Notes" />
-                                    <button><SearchOutlined /></button>
+                                    <button onClick={() => this.props.history.push('/search') }><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
                             </div>
