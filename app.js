@@ -7,6 +7,7 @@ const bodyParser = require('body-parser');
 const AppError = require('./utils/appError');
 const globalErrorHandler = require('./controllers/errorController.js');
 const postRouter = require('./routes/postRoutes');
+const userRouter = require('./routes/userRoutes');
 const router = require('./routes/routes');
 
 
@@ -33,13 +34,13 @@ app.use((req, res, next) => {
 });
 
 // 3) ROUTES
-//app.use('/api/v1/posts', postRouter);
+app.use('/api/v1/posts', postRouter);
 app.use('/', router);
 app.use('/search', router);
 app.use('/post', router);
 app.use('/createPost', router);
 app.use('/query', router);
-//app.use('/api/v1/users', userRouter);
+app.use('/api/v1/users', userRouter);
 
 
 /*

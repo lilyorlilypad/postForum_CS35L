@@ -11,14 +11,14 @@ exports.aliasTopposts = (req, res, next) => {
 };
 
 exports.getAllposts = catchAsync(async (req, res, next) => {
-  /*
+  
   const features = new APIFeatures(post.find(), req.query)
     .filter()
     .sort()
     .limitFields()
     .paginate();
-    */
-  //const posts = await features.query;
+  
+  const posts = await features.query;
   // SEND RESPONSE
 
   post.find()
