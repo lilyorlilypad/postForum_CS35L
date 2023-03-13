@@ -1,4 +1,4 @@
-const post = require('./../models/postModel');
+const Post = require('./../models/postModel');
 const APIFeatures = require('../utils/apiFeatures');
 const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
@@ -12,7 +12,7 @@ exports.aliasTopposts = (req, res, next) => {
 
 exports.getAllposts = catchAsync(async (req, res, next) => {
   
-  const features = new APIFeatures(post.find(), req.query)
+  const features = new APIFeatures(Post.find(), req.query)
     .filter()
     .sort()
     .limitFields()
@@ -21,7 +21,7 @@ exports.getAllposts = catchAsync(async (req, res, next) => {
   const posts = await features.query;
   // SEND RESPONSE
 
-  post.find()
+  Post.find()
 
   res.status(200).json({
     status: 'success',
@@ -34,10 +34,10 @@ exports.getAllposts = catchAsync(async (req, res, next) => {
 
 exports.getpost = catchAsync(async(req, res, next) => {
 
-    const post = await post.findById(req.params.id);
+    const post = await Post.findById(req.params.id);
 
     if (!post) {
-      return next(new AppError('No tour found with that ID', 404));
+      return next(new AppError('No post found with that ID', 404));
     }
 
     res.status(200).json({
@@ -48,9 +48,19 @@ exports.getpost = catchAsync(async(req, res, next) => {
   });
 });
 
+exports.createpost = catchAsync(async (req, res, next) => {
+  const newPost = await Post.create(req.body);
+
+  res.status(201).json({
+    status: 'success',
+    data: {
+      post: newPost
+    }
+  });
+});
 
 exports.updatepost = catchAsync(async (req, res, next) => {
-    const post = await post.findByIdAndUpdate(req.params.id, req.body, {
+    const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
       runValidators: true
     });
@@ -68,12 +78,12 @@ exports.updatepost = catchAsync(async (req, res, next) => {
 
 });
 
-exports.deletepost = catchAsync(async (req, res) => {
-  const post = await post.findByIdAndDelete(req.params.id);
+exports.deletepost = catchAsync(async (req, res, next) => {
+  const post = await Post.findByIdAndDelete(req.params.id);
 
   if (!post) {
-    return next(new AppError('No Post Found with id', 404));
-  };
+    return next(new AppError('No post found with that ID', 404));
+  }
 
   res.status(204).json({
     status: 'success',
@@ -82,7 +92,7 @@ exports.deletepost = catchAsync(async (req, res) => {
 });
 
 exports.getpostStats = catchAsync(async (req, res, next) => {
-  const stats = await post.aggregate([
+  const stats = await Post.aggregate([
     {
      $match: { ratingsAverage: { $gte: 4.5 } }
     },
@@ -113,7 +123,7 @@ exports.getpostStats = catchAsync(async (req, res, next) => {
 exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
     const year = req.params.year * 1; // 2021
 
-    const plan = await post.aggregate([
+    const plan = await Post.aggregate([
       {
         $unwind: '$startDates'
       },
