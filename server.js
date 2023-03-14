@@ -9,21 +9,13 @@ process.on('uncaughtException', err => {
 */
 
 dotenv.config({ path: './config.env' });
-const app = require('./app');
+const app = require('./Server/index');
 
 const DB = process.env.DATABASE;
 
 //implementing comment feature
 
-//define a schema for the comments
-const commentSchema = new mongoose.Schema({
-  name: String,
-  email: String,
-  message: String
-});
 
-//Create a mongoose model for the comments
-const Comment = mongoose.model('Comment', commentSchema);
 
 //connect to MongoDB
 mongoose

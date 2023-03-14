@@ -71,16 +71,13 @@ export default class Product extends React.Component{
 
     //will post a comment to the website, database, and API
     postComment(description){
-
-        console.log("a comment was added");
-
         if(this.state.workingComment === "")
             return;
-
-        var numComments = this.state.Comments.length;
+        console.log("a comment was added");
+        const numComments = this.state.Comments.length;
         
 
-        let newComment = {
+        const newComment = {
             id: numComments+1,
             commenter: String(this.state.currUser),
             commenterThumbnail: require('./carey.jpeg'),     /* this is a dummy test image, remember to delete this */
