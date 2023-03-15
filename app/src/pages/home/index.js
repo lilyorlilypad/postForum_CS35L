@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './index.scss'
-import { Carousel, Card,Modal,Form,Input,Upload,message } from 'antd';
+import { Carousel, Card,Modal,Form,Input,Upload,message, Button } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
@@ -13,6 +13,7 @@ export default class Home extends Component {
         openModal:false,//control the parameter of the pop-up window
         loading :false,
         url:'',
+        disabled: true,
     }
 
     async componentDidMount(){
@@ -124,20 +125,43 @@ export default class Home extends Component {
                         onFinish={this.onFinish}
                         style={{ maxWidth: 600 }}
                     >
-                        <Form.Item name="name" label="Product Title" rules={[{ required: true }]}>
-                            <Input />
+                        <Form.Item name="name" label="Product Title" rules={[{ required: true }]} >
+                            <Input disabled={!this.state.disabled}/>
                         </Form.Item>
                         <Form.Item name="desc" label="Product Description" rules={[{ required: true }]}>
-                            <Input />
+                            <Input disabled={!this.state.disabled}/>
+                        </Form.Item>
+                        <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+                            <Input prefix="$" disabled={!this.state.disabled}/>
+                        </Form.Item>
+                        <Form.Item name="confirm" style={{display: 'flex',justifyContent:'center'}}>
+                            <Button type="default" size="large" onClick={async ()=>{
+                                let data = this.formRef.current.getFieldValue();
+                                let result = await fetch("http://localhost:8080/createPost", {
+                                    method: "POST",
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                    body: JSON.stringify({
+                                        name: data.name,
+                                        summary: data.desc,
+                                        price: data.price,
+                                      })
+                                })
+                                this.setState({disabled:false, recent:data.name});
+                            }}>Confirm!</Button>
                         </Form.Item>
                         <Form.Item label="Upload Image">
                             <Upload
-                                name="avatar"
+                                name="file"
                                 listType="picture-card"
                                 className="avatar-uploader"
+                                data="{this.state.recent}"
                                 showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"//uploaded url
-                                onChange={this.handleChange}
+                                disabled={this.state.disabled}
+                                encrypt="multipart/form-data"
+                                action="http://localhost:8080/api/upload" //upload endpoint
+                                onChange={this.handleChange} 
                             >
                                 {this.state.url ? (
                                     <img

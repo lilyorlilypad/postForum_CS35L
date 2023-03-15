@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
 import "./searchResults.css";
 import "../home/index.scss";
-import { Carousel, Card,Modal,Form,Input,Upload,message } from 'antd';
+import { Carousel, Card,Modal,Form,Input,Upload,message, Button } from 'antd';
 
 
 export default class SearchResult extends React.Component{
@@ -10,30 +10,19 @@ export default class SearchResult extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            products: [{ 
-                id: 1,
-                title: "Epson Expression Home XP-4205 Small-in-One Inkjet Printer, Scanner, Copier - Black",
-                type: "Test Type",
-                seller: "Mr. Egg",
-                sellerLogo: require('./carey.jpeg'),
-                price: "$100",
-                postedDate: "Yesterday",
-                condition: "Brand New",
-                mainImage: './blue.jpeg',
-                thumbnail: require('./printer.webp'),
-                productPageLink: "",
-            },],
+            products: [],
             numResults: "10",
-            searchTerm: "test printer",
+            searchTerm: "",
             list: [
                 {}, {}, {}, {}, {}, {}, {}, {}
             ],
             openModal:false,//control the parameter of the pop-up window
             loading :false,
             loaded: false,
+            disabled:true,
+            recent: "",
             url:'',
         }; 
-
         this.redirectProductPage = this.redirectProductPage.bind(this);
         this.filterResults = this.filterResults.bind(this)
         this.redirectSearchPage =this.redirectSearchPage.bind(this)
@@ -87,8 +76,10 @@ export default class SearchResult extends React.Component{
     //close the pop-up window
     handleCancel = () => {
         this.setState({
-            openModal : false
+            openModal : false,
+            disabled: true
         })
+        console.log("handleCancel() function called");
     }
     //Change the uploaded image to BASE64
     getBase64 = (img, callback) => {
@@ -97,16 +88,36 @@ export default class SearchResult extends React.Component{
         reader.readAsDataURL(img);
     };
     //Check for the uploaded photo
-    beforeUpload = (file) => {
+    beforeUpload(file) {
+        return new Promise((resolve) => {
+            let data = this.formRef.current.getFieldValue();
+            file.name=data.name;
+            console.log(file.name);
+            return file;
+        })
+        
+
+        /*
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
-            message.error('Please upload JPG/PNG files!');
+            message.error('Please upload JPG/PNG files! Please press cancel and try again');
         }
         const isLt2M = file.size / 1024 / 1024 < 2;
         if (!isLt2M) {
-            message.error('Uploaded file cannot be greater than 2MB');
+            message.error('Uploaded file cannot be greater than 2MB! Please press cancel and try again');
         }
-        return isJpgOrPng && isLt2M;
+
+        console.log(file.name);
+        file.name = data.name;
+
+        let data = this.formRef.current.getFieldValue();
+        const formData = new FormData();
+        formData.append('file', file, data.name);
+        console.log(file.name)
+
+
+        return formData;
+        */
     };
     //Function for after finishing the uploading part
     handleChange = (info) => {
@@ -118,13 +129,8 @@ export default class SearchResult extends React.Component{
         }
         console.log(info.file,'infoinfoinfoinfo');//uploaded file
         //When doing the front-back merger, delete this return, use the following commented code
-        return this.getBase64(info.file.originFileObj, (url) => {
-            this.setState({
-                loading:false,
-                url
-            })
-        });
-        /* if (info.file.status === 'done') {
+        
+        if (info.file.status === 'done') {
             //Callback after successfully uploading the info
             this.getBase64(info.file.originFileObj, (url) => {
                 this.setState({
@@ -132,7 +138,8 @@ export default class SearchResult extends React.Component{
                     url
                 })
             });
-        } */
+        } 
+        //info.file.originalname = this.formRef.current.getFieldValue().name;
     };
     //Button for OK in the pop-up window
     handleOk = () => {
@@ -153,14 +160,41 @@ export default class SearchResult extends React.Component{
         this.props.history.push('/')
     }
     
+    imageURL(item){
+        const reader = new FileReader();
+        let url = "";
+        if(item.images.length!==0) {
+            const imageData = new Uint8Array(item.images[0].data.data); 
+            const blob = new Blob([imageData], { type: item.images[0].contentType });
+            url = URL.createObjectURL(blob);
+            return url;
+        }
+        //if (!item.images===undefined) return item.images[1];
 
-    redirectSearchPage(){
-        this.props.history.push('/search')
+        if (!item.images===undefined) return URL.createObjectURL(item.images[0]);
+        //else return "";
+
+    }
+    async redirectSearchPage(){
+        const value = document.getElementById('field').value;
+        this.props.history.push('/search');
+        const result = await this.setState({searchTerm: value});
+        console.log(this.state.searchTerm);
     }
 
    render () {
-        if (!this.state.loaded) return(<div>Loading ...</div>);
-        console.log(this.state.products);
+    console.log("render() called");
+
+    let renderedProducts = [];
+    let search = this.state.searchTerm;
+    if (search==="") renderedProducts = this.state.products;
+    else {
+        for (let i = 0; i < this.state.products.length; i++){
+            if (this.state.products[i].title.toLowerCase().includes(search.toLowerCase()) || this.state.products[i].summary.toLowerCase().includes(search.toLowerCase())) renderedProducts.push(this.state.products[i]);
+        }
+
+    }
+    if (!this.state.loaded) return(<div>Loading ...</div>);
        return (
     <>
         <div className="conditionalBlur">
@@ -183,7 +217,7 @@ export default class SearchResult extends React.Component{
                         <div className="search">
                             <div className="search-m">
                                 <div className="form">
-                                    <input type="text" className="search-keyword" placeholder="Notes" />
+                                    <input type="text" id="field" className="search-keyword" placeholder="Notes" />
                                         <button className="hello" onClick={this.redirectSearchPage}><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
@@ -237,7 +271,7 @@ export default class SearchResult extends React.Component{
                 </div>
 
                 <div className="searchResults">
-                    {this.state.numResults} Results for "{this.state.searchTerm}"
+                    {renderedProducts.length} Results for "{this.state.searchTerm}"
                 </div>
 
             </div>
@@ -249,13 +283,13 @@ export default class SearchResult extends React.Component{
             <section  className="products  max-w-7xl mx-10 grid grid-cols-1 gap-10  " >
 
             <ul>
-                 {this.state.products.map((item,index) => (
+                 {renderedProducts.map((item,index) => (
                     <li key={item.id}>
 
                         <div className="productContainer ">
 
                             <div className="productImage ">
-                                <img className="image" src={item.thumbnail} alt=""  onClick={this.redirectProductPage} />
+                                <img className="image" src={this.imageURL(item)}></img>
                
                             </div>
                   
@@ -276,14 +310,11 @@ export default class SearchResult extends React.Component{
 
                                 <div className="priceAndSeller">
                                     <div className="productPrice">
-                                        <span>{item.price}</span>
+                                        <span>{"$ "+item.price}</span>
                                     </div>
 
                                     <div className="sellerInfo">
 
-                                        <div>
-                                            <img className="sellerImage" src={item.sellerLogo} alt="" />
-                                        </div>
                         
                                         <div className="productSeller">
                                             {item.seller}
@@ -315,20 +346,44 @@ export default class SearchResult extends React.Component{
                         onFinish={this.onFinish}
                         style={{ maxWidth: 600 }}
                     >
-                        <Form.Item name="name" label="Product Title" rules={[{ required: true }]}>
-                            <Input />
+                        <Form.Item name="name" label="Product Title" rules={[{ required: true }]} >
+                            <Input disabled={!this.state.disabled}/>
                         </Form.Item>
                         <Form.Item name="desc" label="Product Description" rules={[{ required: true }]}>
-                            <Input />
+                            <Input disabled={!this.state.disabled}/>
+                        </Form.Item>
+                        <Form.Item name="price" label="Price" rules={[{ required: true }]}>
+                            <Input prefix="$" disabled={!this.state.disabled}/>
+                        </Form.Item>
+                        <Form.Item name="confirm" style={{display: 'flex',justifyContent:'center'}}>
+                            <Button type="default" size="large" onClick={async ()=>{
+                                let data = this.formRef.current.getFieldValue();
+                                let result = await fetch("http://localhost:8080/createPost", {
+                                    method: "POST",
+                                    headers: {
+                                        'Content-Type': 'application/json'
+                                      },
+                                    body: JSON.stringify({
+                                        name: data.name,
+                                        summary: data.desc,
+                                        price: data.price,
+                                      })
+                                })
+                                this.setState({disabled:false, recent:data.name});
+                            }}>Confirm!</Button>
                         </Form.Item>
                         <Form.Item label="Upload Image">
                             <Upload
-                                name="avatar"
+                                name="file"
                                 listType="picture-card"
                                 className="avatar-uploader"
+                                data="{this.state.recent}"
                                 showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"//uploaded url
-                                onChange={this.handleChange}
+                                disabled={this.state.disabled}
+                                encrypt="multipart/form-data"
+                                action="http://localhost:8080/api/upload" //upload endpoint
+                                onChange={this.handleChange} 
+                                //beforeUpload={this.beforeUpload}
                             >
                                 {this.state.url ? (
                                     <img

@@ -3,6 +3,12 @@ const slugify = require('slugify');
 const commentSchema = require('./commentModel')
 // const validator = require('validator');
 
+const fileSchema = new mongoose.Schema({
+  filename: String,
+  contentType: String,
+  data: Buffer
+});
+
 const postSchema = new mongoose.Schema(
   {
     title: {
@@ -11,7 +17,7 @@ const postSchema = new mongoose.Schema(
       unique: true,
       trim: true,
       maxlength: [40, 'A title must have less or equal then 40 characters'],
-      minlength: [5, 'A title must have more or equal then 5 characters']
+
     },
     slug: String,
     summary: {
@@ -24,7 +30,7 @@ const postSchema = new mongoose.Schema(
       trim: true
     },
     idea: String,
-    images: [String],
+    images: [fileSchema],
     createdAt: {
       type: Date,
       default: Date.now(),
@@ -34,6 +40,8 @@ const postSchema = new mongoose.Schema(
     secretPost: {
       type: Boolean,
       default: false
+    },
+    price: {
     }
   },
   {

@@ -1,11 +1,14 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const multer = require('multer');
 
 //link controllers
 const userController = require('../controllers/userController.js');
 const controller = require('../controllers/controller.js');
 const postController = require('../controllers/postController.js');
+
+upload = multer();
 
 
 router
@@ -14,6 +17,9 @@ router
   //.get(userController.getAllUsers)
   //.post(userController.createUser);
 
+
+router
+  .post('/api/upload', upload.single('file'), controller.receiveImg)
 
 router
   .route('/search')
