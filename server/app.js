@@ -53,6 +53,8 @@ app.use('/createPost', router);
 app.use('/query', router);
 app.use('/api/v1/users', userRouter);
 
+app.use('/api/upload', router);
+
 
 /*
 app.all('*', (req, res, next) => {

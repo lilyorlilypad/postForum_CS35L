@@ -1,12 +1,11 @@
 const path = require('path');
+const multer = require('multer');
 post = require('./../models/postModel');
 const postController = require('./postController');
 
 
 exports.base = (req, res) => {
-    //serve static index HTML file
     res.sendFile(path.resolve('./resources/index.html'));
-
 };
 
 exports.search = async(req, res) => {
@@ -49,14 +48,14 @@ exports.query_page = (req, res) => {
         });
 };
 
-
 //create a new post
 exports.createPost = async (req, res, next) => {
     const data = req.body;
+    console.log(req.body);
     const newPost = new post({
-      name: data.name,
+      title: data.name,
       summary: data.summary,
-      description: data.description,
+      price: data.price,
     })
   
     try
@@ -68,5 +67,23 @@ exports.createPost = async (req, res, next) => {
     catch(err)
     {
       res.status(500).send(err);
+    }
+  }
+
+  //receive, save, and associate received images
+  exports.receiveImg = async(req, res, next) => {
+    try{
+      console.log(req.file);
+      const document = await post.findOne().sort({_id:-1}).exec();
+      if (!post) {
+        return res.status(404).send('No posts found');
+      }
+      document.images.push({ data: req.file.buffer, contentType: req.file.mimetype });
+      const updatedPost = await document.save();
+      console.log(updatedPost);
+      res.json(updatedPost);
+    } catch (err){
+      console.error(err);
+      res.status(500).send('Server error');
     }
   }
