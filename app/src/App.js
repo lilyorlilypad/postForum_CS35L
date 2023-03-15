@@ -18,7 +18,7 @@ function App() {
             <Route path='/login' component={Login}></Route>
             <Route path='/home' component={Home}></Route>
             <Route path='/signUp' component={SignUp}></Route>
-            <Route path='/product' component={Product}></Route>
+            {<Route path='/product/:id' render={(props) => <Product {...props} key={props.match.params.id} />} /> /* <Route path='/product' component={Product}></Route> */}
             <Route path='/search' component={SearchResult}></Route> {/* Might need to change this later */}
           </Switch>
         </Suspense>

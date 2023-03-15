@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const commentSchema = require('./commentModel')
 // const validator = require('validator');
 
 const fileSchema = new mongoose.Schema({

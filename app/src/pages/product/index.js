@@ -10,6 +10,7 @@ export default class Product extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            products: [],
             mainImage: require('./eggert.png'), //this is default?
             mainImageId: "",
             images: [{
@@ -54,13 +55,21 @@ export default class Product extends React.Component{
     }
 
     async componentDidMount(){
-        console.log("tried to make request to server");
-        const response = await fetch('http://localhost:8080/query',{method:'GET'});
-        let data = await response.json();
-        console.log(data);
-        
-        //.then(data => console.log(data))
-        //.catch(error => console.error(error))
+        try {
+            const postid = '640f915615f58f55bf84406d';
+            console.log("Trying to make request to server...");
+            const response = await fetch(`http://localhost:8080/api/v1/posts/{$postid}`,{method:'GET'});
+            let data = await response.json();
+            this.setstate({ products: data});
+            //let size = Object.keys(data).length;
+            // for (let i = 0; i < size; i++){
+            //     this.state.products.push(data[i]);
+            // }
+            console.log(this.state.products);
+            this.setState({loaded: true});  
+        } catch (error) {
+            console.error(error);
+        }
     }
 
     likePost(){
@@ -87,18 +96,22 @@ export default class Product extends React.Component{
 
 
     //will retrieve all the comments from the database/API
-    getComments(){
-
-    }
+    // async getComments() {
+    //     const postId = this.state.products._id; // Replace with the actual post ID
+    //     const response = await fetch(`http://localhost:8080/post/${postId}/comment`);
+    //     const comments = await response.json();
+    //     this.setState({ comments });
+    // }
 
     //will post a comment to the website, database, and API
     postComment(description){
 
-        console.log("a comment was added");
-
         if(this.state.workingComment === "")
             return;
 
+        console.log("a comment was added");
+
+        
         var numComments = this.state.Comments.length;
         
 
@@ -111,6 +124,29 @@ export default class Product extends React.Component{
         };
 
         //add comment to the array of other existing comments
+        // fetch('http://localhost:8080/post/${postId}/comment', {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json'
+        //     },
+        //     body: JSON.stringify(newComment)
+        // })
+        // .then(response => {
+        //     if (!response.ok) {
+        //         throw new Error('Network response was not ok');
+        //     }
+        //     return response.json();
+        // })
+        // .then(data => {
+        //     //add comment to the array of other existing comments
+        //     this.setState({ Comments: this.state.Comments.concat(data) });
+        //     //clear the working comment to prevent adding a duplicate comment
+        //     this.setState({ workingComment: "" });
+        //     console.log(this.state.Comments)
+        // })
+        // .catch(error => {
+        //     console.error('There was an error with the fetch operation:', error);
+        // });
         this.setState({Comments: this.state.Comments.concat(newComment)});
 
         //clear the working comment to prevent addign a duplicate comment
@@ -274,7 +310,7 @@ export default class Product extends React.Component{
                 <div className="border-2 border-black shadow justify-center">
                 </div>
 
-                <h2 className="text-slate-900 mb-10 font-bold text-3xl lg:text-4xl pt-10 ">{this.state.title}</h2>
+                <h2 className="text-slate-900 mb-10 font-bold text-3xl lg:text-4xl pt-10 ">{this.state.products.name}</h2>
                 <div>
  
                     <p className="flex items-center justify-center gap-4 py-2 px-4 bg-yellow-400 text-black  rounded-lg shadow mt-5 w-full ">{this.state.Description}</p>
