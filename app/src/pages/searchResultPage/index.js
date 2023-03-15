@@ -327,7 +327,7 @@ export default class SearchResult extends React.Component{
                                 listType="picture-card"
                                 className="avatar-uploader"
                                 showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"//uploaded url
+                                action="" //upload endpoint
                                 onChange={this.handleChange}
                             >
                                 {this.state.url ? (
