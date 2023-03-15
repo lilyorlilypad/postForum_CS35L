@@ -3,18 +3,34 @@ import './index.scss'
 import { Carousel, Card,Modal,Form,Input,Upload,message } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 const { Meta } = Card;
+
 export default class Home extends Component {
     state = {
+        products: [],
         list: [
             {}, {}, {}, {}, {}, {}, {}, {}
         ],
         openModal:false,//control the parameter of the pop-up window
         loading :false,
         url:'',
-        
-
-    
     }
+
+    async componentDidMount(){
+        try {
+            
+            console.log("tried to make request to server");
+            const response = await fetch('http://localhost:8080/query',{method:'GET'});
+            let data = await response.json();
+            let size = Object.keys(data).length;
+            for (let i = 0; i < size; i++){
+                this.state.products.push(data[i]);
+            }
+            console.log(this.state.products);
+            this.setState({loaded: true});  
+        } catch (error) {
+            console.error(error);
+        }
+    }    
 
     formRef = React.createRef()
     uploadButton = (
@@ -73,38 +89,21 @@ export default class Home extends Component {
                             <div className="title">Chosen for You</div>
                             <div className="content">
                                 {
-                                    this.state.list.map((opt, index) => {
+                                    this.state.products.map((opt, index) => {
                                         return <Card
-                                            onClick={() => this.props.history.push('/product' )}
+                                            onClick={() => this.props.history.push(`/product/${opt._id}`)}
+                                            // onClick={() => this.props.history.push('/product/:id' )}
                                             className='option'
                                             hoverable
                                             style={{ width: 240 }}
                                             cover={<img alt="example" src={require("../../assets/images1.jpeg")} />}
                                         >
-                                            <Meta title="Europe Street beat" description="www.instagram.com" />
+                                            {<Meta title={opt.title} description={opt.description} />/* <Meta title="Europe Street beat" description="www.instagram.com" /> */}
                                         </Card>
                                     })
                                 }
                             </div>
-                        </div>
-                        <div className="dropped">
-                            <div className="title">Just Dropped</div>
-                            <div className="content">
-                                {
-                                    this.state.list.map((opt, index) => {
-                                        return <Card
-                                            onClick={() => this.props.history.push('/product')}
-                                            className='option'
-                                            hoverable
-                                            style={{ width: 240 }}
-                                            cover={<img alt="example" src={require("../../assets/images1.jpeg")} />}
-                                        >
-                                            <Meta title="Europe Street beat" description="www.instagram.com" />
-                                        </Card>
-                                    })
-                                }
-                            </div>
-                        </div>
+                        </div>  
                     </div>
                 </div>
                 <div class="footer">

@@ -7,14 +7,9 @@ const commentSchema = new mongoose.Schema({
         required: [true, 'A comment must have text'],
         maxlength: [1000, 'A comment text must have less or equal then 1000 characters'],
       },
-      createdAt: {
-        type: Date,
-        default: Date.now(),
-        select: false
-      },
       postId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Tour',
+        ref: 'Post',
         required: true
       }
   });
