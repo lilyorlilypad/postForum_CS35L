@@ -73,7 +73,6 @@ export default class Product extends React.Component{
     }
 
     likePost(){
-
     }
 
     //function to retreive and set Main Image

@@ -83,5 +83,9 @@ app.use(function(req, res, next) {
   next(error404);
 });
 
+
+
+//to connect with frontend
+//addEventListener.get
 module.exports = app;
 

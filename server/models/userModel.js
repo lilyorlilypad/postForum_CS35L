@@ -17,7 +17,18 @@ const userSchema = new mongoose.Schema(
     required: [true, 'A user must have an email'],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email']
+    validate: [
+      {
+        validator: validator.isEmail,
+        message: 'Please provide a valid email address'
+      },
+      {
+        validator: function(email) {
+          return email.endsWith('@ucla.edu') || email.endsWith('@g.ucla.edu');
+        },
+        message: 'Please provide a UCLA email address ending with @ucla.edu or @g.ucla.edu.'
+      }
+    ]
   },
   role: {
     type: String,
@@ -41,7 +52,7 @@ const userSchema = new mongoose.Schema(
       message: 'Passwords are not the same!'
     }
   },
-  passwordChangedAt: Date,
+  passwordChangedAt: Date
 
 });
 

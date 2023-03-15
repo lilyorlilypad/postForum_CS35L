@@ -45,19 +45,28 @@
         padding: 18px 15px;
         margin: 5px;
     }
+    .loginPage .formElement .email{
+        width: 100%;
+        padding: 18px 15px;
+        margin: 5px;
+    }
     .loginPage .formElement .password{
         width: 100%;
         padding: 18px 15px;
         margin: 5px;
     }
-    
+    .loginPage .formElement .passwordConfirm{
+        width: 100%;
+        padding: 18px 15px;
+        margin: 5px;
+    }
     .loginPage .signForm button {
         color: white;
         background-color: black;
         font-size: 17px;
         border: none;
         border-radius: 30px;
-        padding: 15px 30px;
+        padding: 10px 30px;
         margin-top: 20px;
         cursor: pointer;
         transition: all 0.2s;
