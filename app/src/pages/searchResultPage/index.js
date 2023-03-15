@@ -12,7 +12,7 @@ export default class SearchResult extends React.Component{
         this.state = {
             products: [],
             numResults: "10",
-            searchTerm: "test printer",
+            searchTerm: "",
             list: [
                 {}, {}, {}, {}, {}, {}, {}, {}
             ],
@@ -165,12 +165,8 @@ export default class SearchResult extends React.Component{
         let url = "";
         if(item.images.length!==0) {
             const imageData = new Uint8Array(item.images[0].data.data); 
-            console.log(imageData);
-            console.log(item.images[0]);
             const blob = new Blob([imageData], { type: item.images[0].contentType });
             url = URL.createObjectURL(blob);
-
-            console.log(url)
             return url;
         }
         //if (!item.images===undefined) return item.images[1];
@@ -179,13 +175,26 @@ export default class SearchResult extends React.Component{
         //else return "";
 
     }
-    redirectSearchPage(){
-        this.props.history.push('/search')
+    async redirectSearchPage(){
+        const value = document.getElementById('field').value;
+        this.props.history.push('/search');
+        const result = await this.setState({searchTerm: value});
+        console.log(this.state.searchTerm);
     }
 
    render () {
-        if (!this.state.loaded) return(<div>Loading ...</div>);
-        console.log(this.state.products);
+    console.log("render() called");
+
+    let renderedProducts = [];
+    let search = this.state.searchTerm;
+    if (search==="") renderedProducts = this.state.products;
+    else {
+        for (let i = 0; i < this.state.products.length; i++){
+            if (this.state.products[i].title.toLowerCase().includes(search.toLowerCase()) || this.state.products[i].summary.toLowerCase().includes(search.toLowerCase())) renderedProducts.push(this.state.products[i]);
+        }
+
+    }
+    if (!this.state.loaded) return(<div>Loading ...</div>);
        return (
     <>
         <div className="conditionalBlur">
@@ -208,7 +217,7 @@ export default class SearchResult extends React.Component{
                         <div className="search">
                             <div className="search-m">
                                 <div className="form">
-                                    <input type="text" className="search-keyword" placeholder="Notes" />
+                                    <input type="text" id="field" className="search-keyword" placeholder="Notes" />
                                         <button className="hello" onClick={this.redirectSearchPage}><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
@@ -262,7 +271,7 @@ export default class SearchResult extends React.Component{
                 </div>
 
                 <div className="searchResults">
-                    {this.state.numResults} Results for "{this.state.searchTerm}"
+                    {renderedProducts.length} Results for "{this.state.searchTerm}"
                 </div>
 
             </div>
@@ -274,7 +283,7 @@ export default class SearchResult extends React.Component{
             <section  className="products  max-w-7xl mx-10 grid grid-cols-1 gap-10  " >
 
             <ul>
-                 {this.state.products.map((item,index) => (
+                 {renderedProducts.map((item,index) => (
                     <li key={item.id}>
 
                         <div className="productContainer ">
