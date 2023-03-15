@@ -4,6 +4,7 @@ import { Carousel, Card,Modal,Form,Input,Upload,message } from 'antd';
 import { SearchOutlined } from '@ant-design/icons';
 const { Meta } = Card;
 
+
 export default class Home extends Component {
     state = {
         products: [],
@@ -64,8 +65,13 @@ export default class Home extends Component {
                         <div className="search">
                             <div className="search-m">
                                 <div className="form">
-                                    <input type="text" className="search-keyword" placeholder="Notes" />
-                                    <button onClick={() => this.props.history.push('/search') }><SearchOutlined/></button>
+                                    <input 
+                                    type="text" 
+                                    name="searchKeyword" 
+                                    className="searchKeyword" 
+                                    onChange={this.handleChange}
+                                    placeholder="search for product name" />
+                                    <button onClick={() => this.props.history.push(`/search/${this.state.searchKeyword}`) }><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
                             </div>
@@ -106,8 +112,8 @@ export default class Home extends Component {
                         </div>  
                     </div>
                 </div>
-                <div class="footer">
-                    <div class="wrap">
+                <div className="footer">
+                    <div className="wrap">
                         <p>Welcome to UCLA market!</p>
                     </div>
                 </div>
@@ -214,6 +220,15 @@ export default class Home extends Component {
             });
         } */
     };
+
+    handleChange = event => {
+        const { name, value } = event.target;
+        this.setState({ [name]: value });
+        //console.log(name)
+        //console.log(value)
+        //console.log(this.state.searchKeyword)
+        };
+
     //Button for OK in the pop-up window
     handleOk = () => {
         let params = {

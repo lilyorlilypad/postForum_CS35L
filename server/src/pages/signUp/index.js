@@ -14,7 +14,7 @@ export default class SignUp extends Component {
                             </div>
                             <br/>
                             <div class="formElement">
-                                <input type="password" class="password" name="password" placeholder="Password" autocomplete="off"/>
+                                <input type="password" class="password" name="password" placeholder="Password" autoComplete="off"/>
                             </div>
                             <div class="formLogin">
                                 <button type="submit" onClick={() => this.validateform()}>Sign Up</button>

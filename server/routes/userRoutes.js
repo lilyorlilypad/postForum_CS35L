@@ -9,7 +9,7 @@ router.post('/login', authController.login);
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createUser);
+  //.post(userController.createUser);
 
 router
   .route('/:id')

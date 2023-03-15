@@ -18,6 +18,7 @@ exports.getAllposts = catchAsync(async (req, res, next) => {
     .limitFields()
     .paginate();
   
+    console.log("req.query: ", req.query)
   const posts = await features.query;
   // SEND RESPONSE
 
