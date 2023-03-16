@@ -1,3 +1,11 @@
 SETUP:
 
 Clone github repository, run npm install in ./app/ folder
+Run npm start in ./server/ folder 
+npm run start in ./app/ folder 
+Note: When you do step 5, your server (step 4) should still be running. You may need to open two windows, one for step 4 and one for step 5. 
+
+
+Navigate Web Application:
+Log in/Sign up before you jump to the main page. 
+You can post your products, look at all products others posted, and search for spedific products
