@@ -10,6 +10,7 @@ export default class Product extends React.Component{
     constructor(props){
         super(props);
         this.state = {
+            id: "",
             products: [],
             mainImage: require('./eggert.png'), //this is default?
             mainImageId: "",
@@ -22,9 +23,9 @@ export default class Product extends React.Component{
             currUser: "Dummy User1",
             userImage: require('./eggert.png'), /* this is a dummy test image, remember to delete this */
             seller: "EggMaster",
-            title: "This is a test Title",
+            title: "",
             price: "$150",
-            Description: "Sample paragraph that I'm writing while my head is currently losing its brain but wow the rain. OMG what a day",
+            Description: "",
             workingComment: "test working comment",
             Comments: [{ 
                 id: 1,
@@ -44,6 +45,7 @@ export default class Product extends React.Component{
             openModal:false,//control the parameter of the pop-up window
             loading :false,
             url:'',
+            loaded: false,
 
         }; 
 
@@ -56,16 +58,18 @@ export default class Product extends React.Component{
 
     async componentDidMount(){
         try {
-            const postid = '640f915615f58f55bf84406d';
             console.log("Trying to make request to server...");
-            const response = await fetch(`http://localhost:8080/api/v1/posts/{$postid}`,{method:'GET'});
+            const response = await fetch(`http://localhost:8080/query`,{method:'GET'});
             let data = await response.json();
-            this.setstate({ products: data});
-            //let size = Object.keys(data).length;
-            // for (let i = 0; i < size; i++){
-            //     this.state.products.push(data[i]);
-            // }
+            let size = Object.keys(data).length;
+            for (let i = 0; i < size; i++){
+                this.state.products.push(data[i]);
+            }
             console.log(this.state.products);
+            const currenturl = window.location.href;
+            let tempid = currenturl.substring(currenturl.lastIndexOf("/")+1);
+            this.setState({id: tempid});
+            console.log(this.state.id);
             this.setState({loaded: true});  
         } catch (error) {
             console.error(error);
@@ -76,8 +80,20 @@ export default class Product extends React.Component{
     }
 
     //function to retreive and set Main Image
-    setMainImage(index){
-        
+    imageURL(item){
+        const reader = new FileReader();
+        let url = "";
+        if(item.images.length!==0) {
+            const imageData = new Uint8Array(item.images[0].data.data); 
+            const blob = new Blob([imageData], { type: item.images[0].contentType });
+            url = URL.createObjectURL(blob);
+            return url;
+        }
+        //if (!item.images===undefined) return item.images[1];
+
+        if (!item.images===undefined) return URL.createObjectURL(item.images[0]);
+        //else return "";
+
     }
 
 
@@ -262,8 +278,35 @@ export default class Product extends React.Component{
     }
 
     render(){
+        if(!this.state.loaded){
+            return(<div>Loading...</div>)
+        }
+        
+        if (!this.state.products) {
+            console.log('Products is null or undefined');
+            return;
+          }
+        
+        let ActualProduct = [];
+        console.log(this.state.products);
+        for (let i = 0; i < this.state.products.length; i++){
+            console.log(this.state.products[i]);
+            if(this.state.products[i]._id === this.state.id){
+                console.log("added!")
+                ActualProduct.push(this.state.products[i]);
+            }
+        }
+        console.log(ActualProduct);
+        //reset stuff in the this.state
+        let temp = ActualProduct[0].title;
+        this.setState({title: temp});
+        temp = ActualProduct[0].price;
+        this.setState({price: temp});
+        this.state.price = "$" + temp;
+        temp = ActualProduct[0].summary;
+        this.setState({Description: temp});
         return(
-
+            
             
             <div>
             {/* this will be for inserting header */}
@@ -298,7 +341,8 @@ export default class Product extends React.Component{
 
          <section className="max-w-7xl mx-32 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:place-items-center " >
             <article className="mt-2">
-                <img src={this.state.mainImage} className="rounded-3xl h-96 w-screen mt-3 " alt="" />
+            
+                <img src={this.imageURL(ActualProduct[0])} className="rounded-3xl h-96 w-screen mt-3 " alt="" />
 
             </article>
                 
@@ -309,7 +353,7 @@ export default class Product extends React.Component{
                 <div className="border-2 border-black shadow justify-center">
                 </div>
 
-                <h2 className="text-slate-900 mb-10 font-bold text-3xl lg:text-4xl pt-10 ">{this.state.products.name}</h2>
+                <h2 className="text-slate-900 mb-10 font-bold text-3xl lg:text-4xl pt-10 ">{this.state.title}</h2>
                 <div>
  
                     <p className="flex items-center justify-center gap-4 py-2 px-4 bg-yellow-400 text-black  rounded-lg shadow mt-5 w-full ">{this.state.Description}</p>
