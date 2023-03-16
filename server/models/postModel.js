@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
+const { default: isEmail } = require('validator/lib/isEmail');
 // const validator = require('validator');
 
 const fileSchema = new mongoose.Schema({
@@ -10,9 +11,15 @@ const fileSchema = new mongoose.Schema({
 
 const postSchema = new mongoose.Schema(
   {
+<<<<<<< HEAD
     userId: String,
     userEmail: String,
     userName: String,
+=======
+    userName: String,
+    userId: String,
+    userEmail: String,
+>>>>>>> f3a86049475391af3500273b6d3d2d09820246cf
     title: {
       type: String,
       required: [true, 'A title must have a name'],
