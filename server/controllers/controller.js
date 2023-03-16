@@ -90,9 +90,10 @@ exports.createPost = async (req, res, next) => {
 
   exports.receiveComment = async(req, res, next) => {
     try{
+      console.log(req.body);
       let id = req.body.id;
       let comment_string = req.body.comment;
-      const document = this.post.findOne({_id: id}).exec();
+      const document = await post.findOne({_id: id}).exec();
       if (!post) {
         return res.status(404).send('No posts found.');
       }

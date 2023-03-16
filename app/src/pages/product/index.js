@@ -15,6 +15,7 @@ export default class Product extends React.Component{
             products: [],
             mainImage: require('./eggert.png'), //this is default?
             mainImageId: "",
+            reload: true,
             images: [{
                 id: 1,
                 mainImage: './blue.jpeg',
@@ -27,9 +28,9 @@ export default class Product extends React.Component{
             title: "",
             price: "$150",
             Description: "",
-            workingComment: "test working comment",
+            workingComment: "",
             Comments: [{ 
-                id: 1,
+                //id: 1,
                 //commenter: "test commenter",
                 commenterThumbnail: require('./carey.jpeg'),     /* this is a dummy test image, remember to delete this */
                 description: "Hello this is a random test comment. How does this look? Does it run over the edge? Let's See. My name is Carey"
@@ -76,7 +77,7 @@ export default class Product extends React.Component{
             console.log(this.state.id)
             console.log(this.state.products);
             for (let i = 0; i < this.state.products.length; i++){
-                console.log(this.state.products[i]);
+                //console.log(this.state.products[i]);
                 if(this.state.products[i]._id === this.state.id){
                     console.log("added!")
                     // ActualProduct.push(this.state.products[i]);
@@ -84,7 +85,7 @@ export default class Product extends React.Component{
                     console.log(this.state.ActualProduct);
                 }
             }
-            console.log(this.state.ActualProduct);
+            //console.log(this.state.ActualProduct);
             //reset stuff in the this.state
             let temp = this.state.ActualProduct.title;
             this.setState({title: temp});
@@ -95,7 +96,15 @@ export default class Product extends React.Component{
             temp = this.state.ActualProduct.comment;
             this.setState({})
             console.log(this.state.id);
+            this.setState({Comments: this.state.ActualProduct.comments});
+            console.log();
+            console.log();
+            console.log();
+            console.log(this.state.ActualProduct);
+            console.log(this.state.Comments);
             this.setState({loaded: true});  
+
+
         } catch (error) {
             console.error(error);
         }
@@ -103,6 +112,7 @@ export default class Product extends React.Component{
 
     likePost(){
     }
+
 
     //function to retreive and set Main Image
     imageURL(item){
@@ -144,7 +154,7 @@ export default class Product extends React.Component{
     // }
 
     //will post a comment to the website, database, and API
-    postComment(description){
+    async postComment(description){
 
         console.log("im posting comment");
 
@@ -166,7 +176,7 @@ export default class Product extends React.Component{
         };
 
         //add comment to the array of other existing comments
-        fetch('http://localhost:8080/api/newComment', {
+        let result = await fetch('http://localhost:8080/api/newComment', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -181,11 +191,11 @@ export default class Product extends React.Component{
         })
         .then(data => {
             //add comment to the array of other existing comments
-            this.setState({ Comments: this.state.Comments.concat(data) });
+            //this.setState({ Comments: this.state.Comments.concat(data) });
             //clear the working comment to prevent adding a duplicate comment
             this.setState({ workingComment: "" });
             console.log(this.state.Comments)
-        })
+        }).then(()=>{window.location.reload(true);})
         .catch(error => {
             console.error('There was an error with the fetch operation:', error);
         });
@@ -195,6 +205,10 @@ export default class Product extends React.Component{
         //this.setState({workingComment: ""});
 
         console.log(this.state.Comments)
+
+
+        window.location.reload(true);
+
 
     }
 
@@ -303,6 +317,9 @@ export default class Product extends React.Component{
         console.log('Will Redirect To Product Page');
         this.props.history.push('/search')
     }
+    reRender = () => {
+        this.forceUpdoate();
+    }
 
     render(){
         if(!this.state.loaded){
@@ -399,7 +416,9 @@ export default class Product extends React.Component{
 
                 <div className="sendContainer">
                     <div className="commentButton" >
-                        <button type="button" onClick={() => this.postComment('test')} >Send</button>
+                        <button type="button" onClick={() => {
+                            this.postComment();
+                            }} >Send</button>
                     </div>
                 </div>
 
@@ -419,12 +438,12 @@ export default class Product extends React.Component{
 
                     <ul id="commentList">
                         {this.state.Comments.map((comment,index) => (
-                    <li key={comment.id} className="userComment">
-                        <img src={comment.commenterThumbnail} alt="" className="commentImage" />
-                        <div className="commentWords">
-                            {comment.description}
-                        </div>
-                    </li>
+                            <li key={comment.id} className="userComment">
+                                <img src={comment.commenterThumbnail} alt="" className="commentImage" />
+                                <div className="commentWords">
+                                    {comment.description}
+                                </div>
+                            </li>
                     ))}
                     </ul>
 

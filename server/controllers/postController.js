@@ -64,14 +64,11 @@ exports.createpost = catchAsync(async (req, res, next) => {
     description: req.body.description,
     role: req.body.role
   });
-<<<<<<< HEAD
 
-=======
   console.log ("req.session  after creating a post", req.session)
   //console.log ("req.session  after creating a post", req.session.userName)
   //console.log ("userName", newPost.userName)
   //console.log("the userName is: ", this.state.userName)
->>>>>>> f3a86049475391af3500273b6d3d2d09820246cf
   res.status(201).json({
     status: 'success',
     data: {
@@ -80,11 +77,8 @@ exports.createpost = catchAsync(async (req, res, next) => {
   });
   console.log(newPost)
 });
-<<<<<<< HEAD
-=======
 
 
->>>>>>> f3a86049475391af3500273b6d3d2d09820246cf
 exports.updatepost = catchAsync(async (req, res, next) => {
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,
