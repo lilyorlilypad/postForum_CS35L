@@ -50,7 +50,19 @@ exports.getpost = catchAsync(async(req, res, next) => {
 });
 
 exports.createpost = catchAsync(async (req, res, next) => {
-  const newPost = await Post.create(req.body);
+  const newPost = await Post.create({
+    userName: req.session.userName,
+    userEmail: req.session.userEmail,
+    userId:req.session.userId,
+    title: req.body.title,
+    summary: req.body.summary,
+    images: req.body.images,
+    createdAt: req.body.createdAt,
+    comments:req.body.comments,
+    price: req.body.price,
+    description: req.body.description,
+    role: req.body.role
+  });
 
   res.status(201).json({
     status: 'success',
@@ -58,8 +70,8 @@ exports.createpost = catchAsync(async (req, res, next) => {
       post: newPost
     }
   });
+  console.log(newPost)
 });
-
 exports.updatepost = catchAsync(async (req, res, next) => {
     const post = await Post.findByIdAndUpdate(req.params.id, req.body, {
       new: true,

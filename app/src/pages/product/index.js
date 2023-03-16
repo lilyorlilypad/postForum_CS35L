@@ -10,7 +10,8 @@ export default class Product extends React.Component{
     constructor(props){
         super(props);
         this.state = {
-            id: "",
+            ActualProduct: null,
+            id: "defaultID",
             products: [],
             mainImage: require('./eggert.png'), //this is default?
             mainImageId: "",
@@ -29,7 +30,7 @@ export default class Product extends React.Component{
             workingComment: "test working comment",
             Comments: [{ 
                 id: 1,
-                commenter: "test commenter",
+                //commenter: "test commenter",
                 commenterThumbnail: require('./carey.jpeg'),     /* this is a dummy test image, remember to delete this */
                 description: "Hello this is a random test comment. How does this look? Does it run over the edge? Let's See. My name is Carey"
     
@@ -65,10 +66,34 @@ export default class Product extends React.Component{
             for (let i = 0; i < size; i++){
                 this.state.products.push(data[i]);
             }
-            console.log(this.state.products);
+            
             const currenturl = window.location.href;
             let tempid = currenturl.substring(currenturl.lastIndexOf("/")+1);
-            this.setState({id: tempid});
+            this.state.id = tempid;
+
+            console.log("This is the ID!!!!!!!!!")
+            console.log(tempid)
+            console.log(this.state.id)
+            console.log(this.state.products);
+            for (let i = 0; i < this.state.products.length; i++){
+                console.log(this.state.products[i]);
+                if(this.state.products[i]._id === this.state.id){
+                    console.log("added!")
+                    // ActualProduct.push(this.state.products[i]);
+                    this.state.ActualProduct = this.state.products[i];
+                    console.log(this.state.ActualProduct);
+                }
+            }
+            console.log(this.state.ActualProduct);
+            //reset stuff in the this.state
+            let temp = this.state.ActualProduct.title;
+            this.setState({title: temp});
+            temp = this.state.ActualProduct.price;
+            this.setState({price: ("$" + temp)});
+            temp = this.state.ActualProduct.summary;
+            this.setState({Description: temp});
+            temp = this.state.ActualProduct.comment;
+            this.setState({})
             console.log(this.state.id);
             this.setState({loaded: true});  
         } catch (error) {
@@ -121,6 +146,8 @@ export default class Product extends React.Component{
     //will post a comment to the website, database, and API
     postComment(description){
 
+        console.log("im posting comment");
+
         if(this.state.workingComment === "")
             return;
 
@@ -139,33 +166,33 @@ export default class Product extends React.Component{
         };
 
         //add comment to the array of other existing comments
-        // fetch('http://localhost:8080/post/${postId}/comment', {
-        //     method: 'POST',
-        //     headers: {
-        //         'Content-Type': 'application/json'
-        //     },
-        //     body: JSON.stringify(newComment)
-        // })
-        // .then(response => {
-        //     if (!response.ok) {
-        //         throw new Error('Network response was not ok');
-        //     }
-        //     return response.json();
-        // })
-        // .then(data => {
-        //     //add comment to the array of other existing comments
-        //     this.setState({ Comments: this.state.Comments.concat(data) });
-        //     //clear the working comment to prevent adding a duplicate comment
-        //     this.setState({ workingComment: "" });
-        //     console.log(this.state.Comments)
-        // })
-        // .catch(error => {
-        //     console.error('There was an error with the fetch operation:', error);
-        // });
-        this.setState({Comments: this.state.Comments.concat(newComment)});
+        fetch('http://localhost:8080/api/newComment', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: this.state.id, comment:newComment})
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            //add comment to the array of other existing comments
+            this.setState({ Comments: this.state.Comments.concat(data) });
+            //clear the working comment to prevent adding a duplicate comment
+            this.setState({ workingComment: "" });
+            console.log(this.state.Comments)
+        })
+        .catch(error => {
+            console.error('There was an error with the fetch operation:', error);
+        });
+        //this.setState({Comments: this.state.Comments.concat(newComment)});
 
         //clear the working comment to prevent addign a duplicate comment
-        this.setState({workingComment: ""});
+        //this.setState({workingComment: ""});
 
         console.log(this.state.Comments)
 
@@ -287,24 +314,7 @@ export default class Product extends React.Component{
             return;
           }
         
-        let ActualProduct = [];
-        console.log(this.state.products);
-        for (let i = 0; i < this.state.products.length; i++){
-            console.log(this.state.products[i]);
-            if(this.state.products[i]._id === this.state.id){
-                console.log("added!")
-                ActualProduct.push(this.state.products[i]);
-            }
-        }
-        console.log(ActualProduct);
-        //reset stuff in the this.state
-        let temp = ActualProduct[0].title;
-        this.setState({title: temp});
-        temp = ActualProduct[0].price;
-        this.setState({price: temp});
-        this.state.price = "$" + temp;
-        temp = ActualProduct[0].summary;
-        this.setState({Description: temp});
+        
         return(
             
             
@@ -342,7 +352,7 @@ export default class Product extends React.Component{
          <section className="max-w-7xl mx-32 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:place-items-center " >
             <article className="mt-2">
             
-                <img src={this.imageURL(ActualProduct[0])} className="rounded-3xl h-96 w-screen mt-3 " alt="" />
+                <img src={this.imageURL(this.state.ActualProduct)} className="rounded-3xl h-96 w-screen mt-3 " alt="" />
 
             </article>
                 

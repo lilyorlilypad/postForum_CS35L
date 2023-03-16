@@ -10,6 +10,9 @@ const fileSchema = new mongoose.Schema({
 
 const postSchema = new mongoose.Schema(
   {
+    userId: String,
+    userEmail: String,
+    userName: String,
     title: {
       type: String,
       required: [true, 'A title must have a name'],
