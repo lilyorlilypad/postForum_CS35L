@@ -95,7 +95,7 @@ export default class Home extends Component {
                                     className="searchKeyword" 
                                     onChange={this.handleChange}
                                     placeholder="search for product name" />
-                                    <button onClick={() => this.props.history.push(`/home`) }><SearchOutlined/></button>
+                                    <button onClick={() => this.props.history.push(`/search/${this.state.searchKeyword}`) }><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
                             </div>
@@ -251,13 +251,7 @@ export default class Home extends Component {
         }
         console.log(info.file,'infoinfoinfoinfo');//uploaded file
         //When doing the front-back merger, delete this return, use the following commented code
-        return this.getBase64(info.file.originFileObj, (url) => {
-            this.setState({
-                loading:false,
-                url
-            })
-        });
-        /* if (info.file.status === 'done') {
+        if (info.file.status === 'done') {
             //Callback after successfully uploading the info
             this.getBase64(info.file.originFileObj, (url) => {
                 this.setState({
@@ -265,12 +259,12 @@ export default class Home extends Component {
                     url
                 })
             });
-        } */
+        } 
     };
 
     handleChange = event => {
-        const { name, value } = event.target;
-        this.setState({ [name]: value });
+        //const { name, value } = event.target;
+        //this.setState({ [name]: value });
         //console.log(name)
         //console.log(value)
         //console.log(this.state.searchKeyword)
@@ -285,17 +279,7 @@ export default class Home extends Component {
         console.log(params,'Add info of the product');
         //If added the product info successfully, use the following code to close the window
         message.success('Added Successfully!');
-        fetch("http://localhost:8080/createPost", {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-              },
-            body: JSON.stringify({
-                name: params.name,
-                summary: params.summary,
-                price: params.price,
-            }),
-        });
+        
         this.setState({
             openModal : false
         })

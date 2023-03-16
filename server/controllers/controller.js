@@ -87,3 +87,21 @@ exports.createPost = async (req, res, next) => {
       res.status(500).send('Server error');
     }
   }
+
+  exports.receiveComment = async(req, res, next) => {
+    try{
+      let id = req.body.id;
+      let comment_string = req.body.comment;
+      const document = this.post.findOne({_id: id}).exec();
+      if (!post) {
+        return res.status(404).send('No posts found.');
+      }
+      document.comments.push(comment_string);
+      const updatedPost = await document.save();
+      console.log(updatedPost);
+      res.json(updatedPost);
+    } catch (err){
+      console.error(err);
+      res.status(500).send('Server error. Comment not pushed.');
+    }
+  }
