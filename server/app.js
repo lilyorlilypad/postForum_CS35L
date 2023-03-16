@@ -65,6 +65,7 @@ app.use('/query', router);
 app.use('/api/v1/users', userRouter);
 
 app.use('/api/upload', router);
+app.use('/api/newComment', router);
 
 
 /*

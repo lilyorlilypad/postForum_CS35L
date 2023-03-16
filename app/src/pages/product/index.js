@@ -393,7 +393,7 @@ export default class Product extends React.Component{
                         <img src={this.state.userImage} className="rounded-full" alt="" />
                     </div>
 
-                    <input type="text" className="formElement" placeholder="Add a comment..."  onChange = { (e) => this.setState( { workingComment: e.target.value }  )    } />
+                    <input type="text" className="formElement" placeholder="Add a comment..." onChange = { (e) => this.setState({workingComment: e.target.value})} />
 
                 </div>
 

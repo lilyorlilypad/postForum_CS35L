@@ -22,6 +22,9 @@ router
   .post('/api/upload', upload.single('file'), controller.receiveImg)
 
 router
+  .post('/api/newComment', controller.receiveComment);
+
+router
   .route('/search')
   .get(controller.searchPage);
 
