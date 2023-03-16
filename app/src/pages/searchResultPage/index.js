@@ -239,48 +239,12 @@ export default class SearchResult extends React.Component{
          <div className=" flex justify-center">
              
          <div className="mainContent">
-            
-            <div className="searchResultText">
 
-                {/* Rendering Filters */}
-                <div className="filters">
-                    <div className="popularFilters">
-                        Popular Filters
-                    </div>
+        <div className="searchResults">
+            {renderedProducts.length} Results for "{this.state.searchTerm}"
+        </div>
 
-                    <div className="filterBar">
 
-                        <ul className="filterContainer">
-                            <li className="filterButton">
-                                <button onClick={this.filterResults}>Condition: Brand New</button>
-                            </li>
-
-                            <li className="filterButton">
-                                <button onClick={this.filterResults}>Condition: Pre-Owned</button>
-                            </li>
-
-                            <li className="filterButton">
-                                <button onClick={this.filterResults}>Price Range: Under $25</button>
-                            </li>
-
-                            <li className="filterButton">
-                                <button onClick={this.filterResults}>Price Range: Under $50</button>
-                            </li>
-
-                            <li className="filterButton">
-                                <button onClick={this.filterResults}>Price Range: Under $100</button>
-                            </li>
-
-                        </ul>
-
-                    </div>
-                </div>
-
-                <div className="searchResults">
-                    {renderedProducts.length} Results for "{this.state.searchTerm}"
-                </div>
-
-            </div>
         
 
 
@@ -329,7 +293,7 @@ export default class SearchResult extends React.Component{
                                     </div>
                                 </div>
                                 <div className="detailsContainer">
-                                    <button className="detailsButton  px-4 bg-grey text-black uppercase font-bold rounded-lg shadow mt-5 w-full" onClick={this.redirectProductPage} >Details</button>
+                                    <button className="detailsButton  px-4 bg-grey text-black uppercase font-bold rounded-lg shadow mt-5 w-full" onClick={()=>{this.props.history.push(`/product/${item._id}`)}} >Details</button>
                                 </div>
                             </div>  
                         </div>
@@ -361,6 +325,9 @@ export default class SearchResult extends React.Component{
                         <Form.Item name="price" label="Price" rules={[{ required: true }]}>
                             <Input prefix="$" disabled={!this.state.disabled}/>
                         </Form.Item>
+                        <Form.Item name="email" label="Contact Email" rules={[{ required: true }]}>
+                            <Input disabled={!this.state.disabled}/>
+                        </Form.Item>
                         <Form.Item name="confirm" style={{display: 'flex',justifyContent:'center'}}>
                             <Button type="default" size="large" onClick={async ()=>{
                                 let data = this.formRef.current.getFieldValue();
@@ -373,6 +340,7 @@ export default class SearchResult extends React.Component{
                                         name: data.name,
                                         summary: data.desc,
                                         price: data.price,
+                                        userEmail: data.email,
                                       })
                                 })
                                 this.setState({disabled:false, recent:data.name});

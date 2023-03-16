@@ -53,9 +53,11 @@ exports.createPost = async (req, res, next) => {
     const data = req.body;
     console.log(req.body);
     const newPost = new post({
+
       title: data.name,
       summary: data.summary,
       price: data.price,
+      userEmail: data.userEmail,
     })
   
     try

@@ -163,6 +163,9 @@ export default class Home extends Component {
                         <Form.Item name="price" label="Price" rules={[{ required: true }]}>
                             <Input prefix="$" disabled={!this.state.disabled}/>
                         </Form.Item>
+                        <Form.Item name="email" label="Contact Email" rules={[{ required: true }]}>
+                            <Input disabled={!this.state.disabled}/>
+                        </Form.Item>
                         <Form.Item name="confirm" style={{display: 'flex',justifyContent:'center'}}>
                             <Button type="default" size="large" onClick={async ()=>{
                                 let data = this.formRef.current.getFieldValue();
@@ -175,6 +178,7 @@ export default class Home extends Component {
                                         name: data.name,
                                         summary: data.desc,
                                         price: data.price,
+                                        userEmail: data.email,
                                       })
                                 })
                                 this.setState({disabled:false, recent:data.name});
@@ -220,7 +224,8 @@ export default class Home extends Component {
     //close the pop-up window
     handleCancel = () => {
         this.setState({
-            openModal : false
+            openModal : false,
+            disabled: true,
         })
     }
     //Change the uploaded image to BASE64

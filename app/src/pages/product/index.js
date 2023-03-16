@@ -97,6 +97,7 @@ export default class Product extends React.Component{
             this.setState({})
             console.log(this.state.id);
             this.setState({Comments: this.state.ActualProduct.comments});
+            this.setState({seller: this.state.ActualProduct.userEmail});
             console.log();
             console.log();
             console.log();
@@ -346,7 +347,7 @@ export default class Product extends React.Component{
                                 <img src={require("../../assets/user.png")} alt="" />
                                 <span className="logou" onClick={() => this.logouFn()}>Sign Out</span>
                             </span>
-                            <span onClick={() => this.addGoodsFn()}>Sell Product</span>
+
                         </div>
                     </div>
                 </div>
@@ -454,49 +455,7 @@ export default class Product extends React.Component{
 
 
 
-        <Modal
-                    title="Sell Product"
-                    open={this.state.openModal}
-                    onOk={this.handleOk}
-                    onCancel={this.handleCancel}
-                >
-                    <Form
-                        ref={this.formRef}
-                        name="control-hooks"
-                        onFinish={this.onFinish}
-                        style={{ maxWidth: 600 }}
-                    >
-                        <Form.Item name="name" label="Product Title" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item name="desc" label="Product Description" rules={[{ required: true }]}>
-                            <Input />
-                        </Form.Item>
-                        <Form.Item label="Upload Image">
-                            <Upload
-                                name="avatar"
-                                listType="picture-card"
-                                className="avatar-uploader"
-                                showUploadList={false}
-                                action="https://www.mocky.io/v2/5cc8019d300000980a055e76"//uploaded url
-                                onChange={this.handleChange}
-                            >
-                                {this.state.url ? (
-                                    <img
-                                        src={this.state.url}
-                                        alt="avatar"
-                                        style={{
-                                            width: '100%',
-                                        }}
-                                    />
-                                ) : (
-                                    this.uploadButton
-                                )}
-                            </Upload>
-                        </Form.Item>
-                    </Form>
-                </Modal>
-
+        
 
         </div>
        
