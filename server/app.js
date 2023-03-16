@@ -11,7 +11,7 @@ const globalErrorHandler = require('./controllers/errorController.js');
 const postRouter = require('./routes/postRoutes');
 const userRouter = require('./routes/userRoutes');
 const router = require('./routes/routes');
-
+const session = require('express-session');
 
 
 const app = express();
@@ -24,12 +24,23 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
+app.use(
+  session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  //cookie: { secure: false }
+}));
+
+
 const limiter = rateLimit({
   max: 100,
   windowMs: 60 * 60 * 1000,
   message: 'Too many requests from this IP, please try again in an hour'
 })
 app.use('/api',limiter);
+
+
 
 app.use(cors());
 
