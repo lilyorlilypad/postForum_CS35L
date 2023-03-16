@@ -34,14 +34,17 @@ export default class SearchResult extends React.Component{
         const { searchKeyword } = this.props.match.params;
         console.log(searchKeyword)
         console.log(`searching for ${searchKeyword}`);
-        const response = await fetch(`http://localhost:8080/api/v1/posts?title=${searchKeyword}`,{method:'GET'});
+        const response = await fetch(`http://localhost:8080/query`,{method:'GET'});
         let data = await response.json();
         let size = Object.keys(data).length;
         for (let i = 0; i < size; i++){
             this.state.products.push(data[i]);
         }
         console.log(this.state.products);
-        this.setState({loaded: true});
+        const searchURL = window.location.href;
+        const search = searchURL.substring(searchURL.search("search")+7)
+        if (search==="undefined") this.setState({loaded: true, searchTerm: ""});
+        else this.setState({loaded: true, searchTerm: search});
     }
 
     formRef = React.createRef()
