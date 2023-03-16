@@ -15,6 +15,7 @@ export default class Home extends Component {
         loading :false,
         url:'',
         disabled: true,
+        loaded: false,
     }
 
     async componentDidMount(){
@@ -32,7 +33,25 @@ export default class Home extends Component {
         } catch (error) {
             console.error(error);
         }
-    }    
+    }
+
+    imageURL(item){
+        const reader = new FileReader();
+        let url = "";
+        if(item.images.length!==0) {
+            const imageData = new Uint8Array(item.images[0].data.data); 
+            const blob = new Blob([imageData], { type: item.images[0].contentType });
+            url = URL.createObjectURL(blob);
+            return url;
+        }
+        //if (!item.images===undefined) return item.images[1];
+
+        if (!item.images===undefined) return URL.createObjectURL(item.images[0]);
+        //else return "";
+
+    }
+    
+    
 
     formRef = React.createRef()
     uploadButton = (
@@ -47,6 +66,10 @@ export default class Home extends Component {
         </div>
     );
     render() {
+        if(!this.state.loaded){
+            return(<div>Loading...</div>)
+        }
+
         return (
             <div className='home'>
                 <div className="min-header">
@@ -72,7 +95,7 @@ export default class Home extends Component {
                                     className="searchKeyword" 
                                     onChange={this.handleChange}
                                     placeholder="search for product name" />
-                                    <button onClick={() => this.props.history.push(`/search/${this.state.searchKeyword}`) }><SearchOutlined/></button>
+                                    <button onClick={() => this.props.history.push(`/home`) }><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
                             </div>
@@ -103,9 +126,9 @@ export default class Home extends Component {
                                             className='option'
                                             hoverable
                                             style={{ width: 240 }}
-                                            cover={<img alt="example" src={require("../../assets/images1.jpeg")} />}
+                                            cover={<img alt="example" src={this.imageURL(opt)} />}
                                         >
-                                            {<Meta title={opt.title} description={opt.description} />/* <Meta title="Europe Street beat" description="www.instagram.com" /> */}
+                                            {<Meta title={opt.title} description={opt.summary} />/* <Meta title="Europe Street beat" description="www.instagram.com" /> */}
                                         </Card>
                                     })
                                 }

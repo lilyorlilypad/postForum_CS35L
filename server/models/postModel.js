@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const slugify = require('slugify');
-const commentSchema = require('./commentModel')
 // const validator = require('validator');
 
 const fileSchema = new mongoose.Schema({
@@ -41,8 +40,8 @@ const postSchema = new mongoose.Schema(
       type: Boolean,
       default: false
     },
-    price: {
-    }
+    price: {},
+    comments: [] 
   },
   {
     toJSON: { virtuals: true },
