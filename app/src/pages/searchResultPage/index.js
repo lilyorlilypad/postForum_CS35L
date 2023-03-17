@@ -157,8 +157,10 @@ export default class SearchResult extends React.Component{
         //If added the product info successfully, use the following code to close the window
         message.success('Added Successfully!');
         this.setState({
-            openModal : false
+            openModal : false,
+            disabled: true,
         })
+        window.location.reload(true);
     }
     ///Sign out
     logouFn = () => {
