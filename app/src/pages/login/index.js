@@ -109,8 +109,8 @@ export default class Login extends Component {
         }),
         headers: {
             "Content-type": "application/json; charset=UTF-8"
-          }
-        
+          },
+          credentials: 'include' // add this option to include cookies
     })
     /*
         .then((response) => response.json())

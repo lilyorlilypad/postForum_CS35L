@@ -20,10 +20,13 @@ const createSendToken = (user, statusCode, res) => {
     expires: new Date(
       Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
     ),
-    httpOnly: true
+    httpOnly: false,
+    path: '/',
+    secure: false
   };
-  if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
+  //if (process.env.NODE_ENV === 'production') cookieOptions.secure = true;
 
+  console.log('the produced token is: ', token)
   res.cookie('jwt', token, cookieOptions);
 
   // Remove password from output
@@ -38,58 +41,6 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-/*
-exports.signup = catchAsync(async (req, res, next) => {
-  try{
-  const newUser = await User.create({
-    name: req.body.username,
-    email: req.body.email,
-    password: req.body.password,
-    passwordConfirm: req.body.passwordConfirm,
-    role: req.body.role
-  });
-  createSendToken(newUser,201,res);
-} catch (err){
-  console.log(err)
-  res.status(400).json({
-    status:'fail',
-    message: err.message
-  })
-}
-
-});
-
-  exports.login = catchAsync(async (req, res, next) => {
-    const { email, password } = req.body;
-  
-    // 1) Check if email and password exist
-    if (!email || !password) {
-      //return next(new AppError('Please provide email and password!', 400));
-      res.status(400).json({
-        status:'failure',
-      });
-    };
-
-    // 2) Check if user exists && password is correct
-    const user = await User.findOne({ email }).select('+password');
-  
-    if (!user || !(await user.correctPassword(password, user.password))) {
-      //return next(new AppError('Incorrect email or password', 401));
-      res.status(40 ).json({
-        status:'failure',
-      });
-    }
-  
-    // 3) If everything ok, send token to client
-  //if ok, send token to client
-
-  const token = signToken(user._id);
-  res.status(200).json({
-    status:'success',
-    token
-  });
-});
-*/
 
 exports.signup = catchAsync(async (req, res, next) => {
   try{
@@ -100,12 +51,13 @@ exports.signup = catchAsync(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm,
     role: req.body.role
   });
-      req.session.userId=newUser.id;
-      req.session.userEmail=newUser.email;
-      req.session.userName=newUser.name;
     await new Promise(resolve => req.session.save(resolve));
     //console.log ("req.session", req.session)
     createSendToken(newUser,201,res);
+
+  console.log('the stored cookie token is: ')
+  console.log(res.getHeaders()['set-cookie'])
+  
 } catch (err){
   console.log(err)
   res.status(400).json({
@@ -115,6 +67,11 @@ exports.signup = catchAsync(async (req, res, next) => {
 }
 
 });
+
+
+
+
+
 
   exports.login = catchAsync(async (req, res, next) => {
     const { email, password } = req.body;
@@ -139,13 +96,25 @@ exports.signup = catchAsync(async (req, res, next) => {
   
     // 3) If everything ok, send token to client
   //if ok, send token to client
-  req.session.userId=user.id;
-  req.session.userEmail=user.email;
-  req.session.userName=user.name;
   await new Promise(resolve => req.session.save(resolve));
   //console.log ("req.session for user login is ", req.session);
   //console.log ("req.session useName is ", req.session.userName);
   const token = signToken(user._id);
+  console.log('the produced token is: ', token)
+
+  const cookieOptions = {
+    expires: new Date(
+      Date.now() + process.env.JWT_COOKIE_EXPIRES_IN * 24 * 60 * 60 * 1000
+    ),
+    httpOnly: false,
+    path: '/',
+    secure: false
+  };
+
+  res.cookie('jwt', token, cookieOptions)
+
+console.log('the stored cookie token is: ')
+console.log(res.getHeaders()['set-cookie'])
   res.status(200).json({
     status:'success',
     token

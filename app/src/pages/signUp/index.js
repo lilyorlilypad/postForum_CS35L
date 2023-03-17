@@ -161,6 +161,7 @@ export default class SignUp extends Component {
         console.log(this.state.passwordConfirm)
         fetch('http://localhost:8080/api/v1/users/signup',{
             method:'POST',
+            credentials: 'include',
             body: JSON.stringify({
                 username: this.state.username,
                 email: this.state.email,

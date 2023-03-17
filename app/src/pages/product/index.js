@@ -5,7 +5,6 @@ import "./Product.css";
 import "../home/index.scss";
 
 
-
 export default class Product extends React.Component{
     constructor(props){
         super(props);
@@ -61,7 +60,8 @@ export default class Product extends React.Component{
     async componentDidMount(){
         try {
             console.log("Trying to make request to server...");
-            const response = await fetch(`http://localhost:8080/query`,{method:'GET'});
+            const response = await fetch(`http://localhost:8080/query`,{method:'GET',
+            credentials: 'include'});
             let data = await response.json();
             let size = Object.keys(data).length;
             for (let i = 0; i < size; i++){
@@ -179,6 +179,7 @@ export default class Product extends React.Component{
         //add comment to the array of other existing comments
         let result = await fetch('http://localhost:8080/api/newComment', {
             method: 'POST',
+            credentials: 'include',
             headers: {
                 'Content-Type': 'application/json'
             },

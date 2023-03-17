@@ -20,9 +20,15 @@ export default class Home extends Component {
 
     async componentDidMount(){
         try {
-            
+            const token = document.cookie
+            console.log("token is: ")
+            console.log(token)
+            //const headers = {'Authorization': `Bearer ${token}`};
             console.log("tried to make request to server");
-            const response = await fetch('http://localhost:8080/query',{method:'GET'});
+            const response = await fetch('http://localhost:8080/query',{
+                method:'GET',
+                credentials: 'include' // add this option to include cookies},
+        });
             let data = await response.json();
             let size = Object.keys(data).length;
             for (let i = 0; i < size; i++){
@@ -174,12 +180,14 @@ export default class Home extends Component {
                                     headers: {
                                         'Content-Type': 'application/json'
                                       },
+                                      credentials: 'include', // add this option to include cookies
                                     body: JSON.stringify({
                                         name: data.name,
                                         summary: data.desc,
                                         price: data.price,
                                         userEmail: data.email,
                                       })
+
                                 })
                                 this.setState({disabled:false, recent:data.name});
                             }}>Confirm!</Button>

@@ -29,7 +29,7 @@ app.use(
   secret: 'your-secret-key',
   resave: false,
   saveUninitialized: true,
-  //cookie: { secure: false }
+  cookie: { secure: false }
 }));
 
 
@@ -42,7 +42,9 @@ app.use('/api',limiter);
 
 
 
-app.use(cors());
+
+  
+app.use(cors({credentials: true, origin: 'http://localhost:3000'}));
 
 app.use(express.json());
 app.use(express.static(`${__dirname}/public`));

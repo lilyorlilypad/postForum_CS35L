@@ -34,7 +34,8 @@ export default class SearchResult extends React.Component{
         const { searchKeyword } = this.props.match.params;
         console.log(searchKeyword)
         console.log(`searching for ${searchKeyword}`);
-        const response = await fetch(`http://localhost:8080/query`,{method:'GET'});
+        const response = await fetch(`http://localhost:8080/query`,{method:'GET',
+        credentials: 'include'});
         let data = await response.json();
         let size = Object.keys(data).length;
         for (let i = 0; i < size; i++){
@@ -335,6 +336,7 @@ export default class SearchResult extends React.Component{
                                 let data = this.formRef.current.getFieldValue();
                                 let result = await fetch("http://localhost:8080/createPost", {
                                     method: "POST",
+                                    credentials: 'include',
                                     headers: {
                                         'Content-Type': 'application/json'
                                       },
