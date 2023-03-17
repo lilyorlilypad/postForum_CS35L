@@ -7,6 +7,7 @@ import { useHistory } from "react-router-dom";
 
 
 
+
 export default class Login extends Component {
     render() {
         return ( 
@@ -98,7 +99,6 @@ export default class Login extends Component {
       }
 
     clickLogin = (e) => {
-        e.preventDefault();
         console.log(this.state.username)
         console.log(this.state.password)
         fetch('http://localhost:8080/api/v1/users/login',{
