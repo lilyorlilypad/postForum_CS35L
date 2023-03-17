@@ -4,6 +4,15 @@ import './index.scss';
 
 
 export default class SignUp extends Component {
+    state = {
+        username: '',
+        email: '',
+        password: '',
+        passwordConfirm: '',
+        emailError: '',
+        usernameError: '',
+      };
+
     render() {
         return (
             <div className="signUp">
@@ -48,7 +57,7 @@ export default class SignUp extends Component {
                             </div>
                             <div className="formLogin">
                                 <button type="submit" 
-                                onClick={this.clickSignin}>Sign In</button>
+                                onClick={() => {this.validateform(); this.clickSignin();}}>Sign Up</button>
                             </div>
                         </div>
                     </div>
@@ -61,7 +70,18 @@ export default class SignUp extends Component {
             </div>
         )
     }
-/*
+
+    nameCheck = () => {
+
+        let name=this.state.username
+        console.log(" username is", name)
+        if (name.length>15)
+        {
+            alert("Your username needs to be shorter than 15 characters");
+            return false
+        }
+    }
+
     emailCheck= () => {
         
         
@@ -86,6 +106,7 @@ export default class SignUp extends Component {
     
     passwordCheck= () =>{
         let userpsw = this.state.password
+        let pswconfirm=this.state.passwordConfirm
         console.log(userpsw)
         if(userpsw === ""){
             alert ("Please enter your password");
@@ -96,19 +117,24 @@ export default class SignUp extends Component {
             alert("Please enter the password with the length greater than 8");
             return false;
         }
+        if (pswconfirm!=userpsw){
+            alert("Please make sure the two passwords you entered are the same");
+            return false
+        }
         return true;
     }
     
     validateform= () => {
         //Go to login page if sign up succesfully
         //this.props.history.push('/login')
-        if(this.emailCheck() && this.passwordCheck()){
+        if(this.nameCheck() && this.emailCheck() && this.passwordCheck()){
+            console.log("passed test")
             return true;
         }else{
             return false;
         }
     }
-*/
+
     handleChange = event => {
         //const [email, setEmail] = useState('');
         //const [password, setPassword] = useState('');
