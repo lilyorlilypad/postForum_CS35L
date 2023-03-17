@@ -155,7 +155,6 @@ export default class SignUp extends Component {
     
 
     clickSignin = (e) => {
-        e.preventDefault();
         console.log(this.state.username)
         console.log(this.state.email)
         console.log(this.state.password)
