@@ -1,5 +1,8 @@
 import React, { Component } from 'react'
 import { SearchOutlined } from '@ant-design/icons';
+import {AiOutlineHeart} from 'react-icons/ai';
+import {AiFillHeart} from 'react-icons/ai';
+import { FaBeer } from 'react-icons/fa';
 import { Carousel, Card,Modal,Form,Input,Upload,message } from 'antd';
 import "./Product.css";
 import "../home/index.scss";
@@ -21,7 +24,6 @@ export default class Product extends React.Component{
                 mainImage: './blue.jpeg',
                 thumbnail: require('./blue.jpeg')
             },],
-            likedStatus: false,
             currUser: "Dummy User1",
             userImage: require('./eggert.png'), /* this is a dummy test image, remember to delete this */
             seller: "EggMaster",
@@ -29,6 +31,8 @@ export default class Product extends React.Component{
             price: "$150",
             Description: "",
             workingComment: "",
+            likeCount: 1,
+            alreadyLiked: false,
             Comments: [{ 
                 //id: 1,
                 //commenter: "test commenter",
@@ -55,6 +59,7 @@ export default class Product extends React.Component{
         this.postComment= this.postComment.bind(this);
         this.likePost = this.likePost.bind(this);
         this.redirectSearchPage = this.redirectSearchPage.bind(this)
+        this.updateLikeCount = this.updateLikeCount.bind(this)
 
     }
 
@@ -322,6 +327,28 @@ export default class Product extends React.Component{
         this.forceUpdoate();
     }
 
+    updateLikeCount () {
+        console.log("Will update like button")
+        if (this.state.alreadyLiked === false)
+        {
+            this.state.likeCount += 1;
+            this.state.alreadyLiked = true;
+            console.log("increased like count");
+            console.log("the like count is now: " + this.state.likeCount)
+            // return;
+        }
+        else if (this.state.likeCount != 0){
+            this.state.likeCount -= 1;
+            this.state.alreadyLiked = false;
+            console.log("decreased like count");
+            console.log("the like count is now: " + this.state.likeCount)
+            // return;
+
+        }
+            
+
+    }
+
     render(){
         if(!this.state.loaded){
             return(<div>Loading...</div>)
@@ -371,6 +398,23 @@ export default class Product extends React.Component{
             <article className="mt-2">
             
                 <img src={this.imageURL(this.state.ActualProduct)} className="rounded-3xl h-96 w-screen mt-3 " alt="" />
+
+                <div className="likeContainer">
+                    {/* Display unfilled like button */ }
+                    { !(this.state.alreadyLiked) && 
+                    <div className="likeButton" >
+                        <button className="flex" onClick={() => {
+                            this.updateLikeCount();
+                            }} > <AiOutlineHeart className="flex mr-2 mt-1" />  Liked by {this.state.likeCount} </button>
+                    </div>} 
+                    {/* Display filled like button */ }
+                    { this.state.alreadyLiked && <div className="likeButton bg-red-500 flex" >
+                        <button className="flex " onClick={() => {
+                            this.updateLikeCount();
+                            }}> <AiFillHeart className="flex mr-2 mt-1"/>  Liked by {this.state.likeCount} </button>
+                    </div>} 
+
+                </div>
 
             </article>
                 

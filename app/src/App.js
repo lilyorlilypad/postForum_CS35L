@@ -9,6 +9,9 @@ const Product = React.lazy(() => import('./pages/product'))
 const SearchResult = React.lazy(() => import('./pages/searchResultPage'))
 
 function App() {
+
+  
+
   return (
     <Router history={history}>
       <div className='App'>
