@@ -58,6 +58,7 @@ exports.createPost = async (req, res, next) => {
       summary: data.summary,
       price: data.price,
       userEmail: data.userEmail,
+      numberOfLikes: 0,
     })
   
     try
@@ -100,6 +101,42 @@ exports.createPost = async (req, res, next) => {
         return res.status(404).send('No posts found.');
       }
       document.comments.push(comment_string);
+      const updatedPost = await document.save();
+      console.log(updatedPost);
+      res.json(updatedPost);
+    } catch (err){
+      console.error(err);
+      res.status(500).send('Server error. Comment not pushed.');
+    }
+  }
+
+  exports.addLike = async(req, res, next) => {
+    try{
+      console.log(req.body);
+      let id = req.body.id;
+      const document = await post.findOne({_id: id}).exec();
+      if (!post) {
+        return res.status(404).send('No posts found.');
+      }
+      document.numberOfLikes = document.numberOfLikes+1;
+      const updatedPost = await document.save();
+      console.log(updatedPost);
+      res.json(updatedPost);
+    } catch (err){
+      console.error(err);
+      res.status(500).send('Server error. Comment not pushed.');
+    }
+  }
+
+  exports.minusLike = async(req, res, next) => {
+    try{
+      console.log(req.body);
+      let id = req.body.id;
+      const document = await post.findOne({_id: id}).exec();
+      if (!post) {
+        return res.status(404).send('No posts found.');
+      }
+      document.numberOfLikes = document.numberOfLikes-1;
       const updatedPost = await document.save();
       console.log(updatedPost);
       res.json(updatedPost);

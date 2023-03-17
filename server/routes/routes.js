@@ -46,4 +46,12 @@ router
   .patch(userController.updateUser)
   .delete(userController.deleteUser);
 
+router
+  .route('/api/addLike')
+  .post(controller.addLike);
+
+router
+  .route('/api/minusLike')
+  .post(controller.minusLike);
+
 module.exports = router;

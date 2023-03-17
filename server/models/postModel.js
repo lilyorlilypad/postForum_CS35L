@@ -45,7 +45,8 @@ const postSchema = new mongoose.Schema(
       default: false
     },
     price: {},
-    comments: [] 
+    comments: [],
+    numberOfLikes: Number,
   },
   {
     toJSON: { virtuals: true },
