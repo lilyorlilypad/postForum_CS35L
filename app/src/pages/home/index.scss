@@ -85,13 +85,12 @@
         height: 60px;
     }
     
-    .form{
+    .form {
         height: 40px;
         border: 2px solid #48a1f5;;
         background-color: white;
     }
-    
-    .search-keyword{
+    .form .searchKeyword{
         position: absolute;
         width: 420px;
         height: 30px;
@@ -102,6 +101,7 @@
         color: black;
         outline: none;
     }
+
     
     .form button{
       position: absolute;

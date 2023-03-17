@@ -357,7 +357,7 @@ export default class Product extends React.Component{
                             <div className="search">
                                 <div className="search-m">
                                     <div className="form">
-                                        <input type="text" className="search-keyword" placeholder="Notes" />
+                                        <input type="text" className="searchKeyword" placeholder="Notes" />
                                         <button onClick={this.redirectSearchPage} ><SearchOutlined/></button>
                                         <div className="search-helper"></div>
                                     </div>
