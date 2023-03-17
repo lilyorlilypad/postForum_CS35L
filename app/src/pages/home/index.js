@@ -286,8 +286,10 @@ export default class Home extends Component {
         message.success('Added Successfully!');
         
         this.setState({
-            openModal : false
+            openModal : false,
+            disabled: false,
         })
+        window.location.reload(true);
     }
     ///Sign out
     logouFn = () => {
