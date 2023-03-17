@@ -8,6 +8,8 @@ const { Meta } = Card;
 export default class Home extends Component {
     state = {
         products: [],
+        recentProducts: [],
+        popProducts: [],
         list: [
             {}, {}, {}, {}, {}, {}, {}, {}
         ],
@@ -28,6 +30,38 @@ export default class Home extends Component {
             for (let i = 0; i < size; i++){
                 this.state.products.push(data[i]);
             }
+
+
+            let mostsize = 0;
+            let most = 0;
+            let mostIndex = -1;
+            let added = [];
+            let randomArr = [];
+            if (size < 4){
+                this.state.popProducts = this.state.products;
+                this.state.recentProducts = this.state.products;
+            }
+            else {
+                for (let j = 0; j < 4; j ++){
+                    for(let i = 0; i < size; i++){
+                        if (!added.includes(i) && this.state.products[i].numberOfLikes > most){
+                            mostIndex = i;
+                        }
+                    }
+        
+                    this.state.popProducts.push(this.state.products[mostIndex]);
+                    added.push(mostIndex);
+                    let min = 0; let max = size;
+                    let random = Math.floor(Math.random()*(max-min+1)+min);
+                    while (randomArr.includes(random)){
+                        random = Math.floor(Math.random()*(max-min+1)+min);
+                    }
+                    this.state.recentProducts.push(this.state.products[random]);
+                    randomArr.push(random);
+                }
+            }
+            
+            
             console.log(this.state.products);
             this.setState({loaded: true});  
         } catch (error) {
@@ -116,10 +150,10 @@ export default class Home extends Component {
                 <div className="goods">
                     <div className="wrap">
                         <div className="recommend">
-                            <div className="title">Chosen for You</div>
+                            <div className="title">Most Liked</div>
                             <div className="content">
                                 {
-                                    this.state.products.map((opt, index) => {
+                                    this.state.popProducts.map((opt, index) => {
                                         return <Card
                                             onClick={() => this.props.history.push(`/product/${opt._id}`)}
                                             // onClick={() => this.props.history.push('/product/:id' )}
@@ -133,7 +167,24 @@ export default class Home extends Component {
                                     })
                                 }
                             </div>
-                        </div>  
+                            <div className="title">Just Dropped</div>
+                            <div className="content">
+                                {
+                                    this.state.recentproducts.map((opt, index) => {
+                                        return <Card
+                                            onClick={() => this.props.history.push(`/product/${opt._id}`)}
+                                            // onClick={() => this.props.history.push('/product/:id' )}
+                                            className='option'
+                                            hoverable
+                                            style={{ width: 240 }}
+                                            cover={<img alt="example" src={this.imageURL(opt)} />}
+                                        >
+                                            {<Meta title={opt.title} description={opt.summary} />/* <Meta title="Europe Street beat" description="www.instagram.com" /> */}
+                                        </Card>
+                                    })
+                                }
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div className="footer">
