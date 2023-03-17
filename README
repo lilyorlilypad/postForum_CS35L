@@ -1,5 +1,8 @@
-SETUP:
+Warning:
+If you are using UCLA wifi, please make sure you are connected to eduroam. If you are connected to UCLA_web, 
+the application will crash since it cannot connect to the database.
 
+SETUP:
 1. Clone github repository, run npm install in ./app/ folder
 2. run "npm start" in ./server/ folder 
 3. run "npm run start" in ./app/ folder 
