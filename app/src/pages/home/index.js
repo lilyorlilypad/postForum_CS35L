@@ -143,7 +143,7 @@ export default class Home extends Component {
                                     name="searchKeyword" 
                                     className="searchKeyword" 
                                     onChange={this.handleChange}
-                                    placeholder="search for product name" />
+                                    placeholder="Check out all products & services!" />
                                     <button onClick={() => this.props.history.push(`/search/${this.state.searchKeyword}`) }><SearchOutlined/></button>
                                     <div className="search-helper"></div>
                                 </div>
