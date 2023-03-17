@@ -64,14 +64,18 @@ export default class Home extends Component {
         
                     this.state.popProducts.push(this.state.products[mostIndex]);
                     added.push(mostIndex);
-                    let min = 0; let max = size-1;
-                    let random = Math.floor(Math.random()*(max-min+1)+min);
-                    while (randomArr.includes(random)){
-                        random = Math.floor(Math.random()*(max-min+1)+min);
-                    }
-                    this.state.recentProducts.push(this.state.products[random]);
-                    randomArr.push(random);
                 }
+                const lastFour= this.state.products.slice(-4)
+                for (let i=3; i>=0; i--) {
+                    this.state.recentProducts.push(lastFour[i])
+                /*let min = 0; let max = size-1;
+                let random = Math.floor(Math.random()*(max-min+1)+min);
+                while (randomArr.includes(random)){
+                    random = Math.floor(Math.random()*(max-min+1)+min);
+                }
+                this.state.recentProducts.push(this.state.products[random]);
+                randomArr.push(random);*/
+            }
             }
             
             

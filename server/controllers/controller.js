@@ -52,7 +52,10 @@ exports.query_page = (req, res) => {
 //create a new post
 exports.createPost = async (req, res, next) => {
   console.log("createPost gets: ")
-  const token =req.headers.cookie.split("; ")[2].split("=")[1]
+  const token =req.headers.cookie.split('jwt=')[1].split("; ")[0]
+  //const tokenElement =req.headers.cookie.split("; ")
+  //const token=tokenElement.
+  //startsWith('jwt').split("=")[1]
   const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
   let {id, creatAt, expireAt} = decoded;
   console.log(id)
