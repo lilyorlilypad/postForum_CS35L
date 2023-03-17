@@ -9,6 +9,7 @@ import "../home/index.scss";
 
 
 
+
 export default class Product extends React.Component{
     constructor(props){
         super(props);
@@ -103,6 +104,7 @@ export default class Product extends React.Component{
             console.log(this.state.id);
             this.setState({Comments: this.state.ActualProduct.comments});
             this.setState({seller: this.state.ActualProduct.userEmail});
+            this.setState({likeCount: this.state.ActualProduct.numberOfLikes});
             console.log();
             console.log();
             console.log();
@@ -116,7 +118,18 @@ export default class Product extends React.Component{
         }
     }
 
-    likePost(){
+    async likePost(){
+        let result = await fetch('http://localhost:8080/api/addLike', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({id: this.state.id}),
+        })
+        console.log(this.state.id);
+        console.log(result);
+        window.location.reload();
+
     }
 
 
@@ -171,16 +184,12 @@ export default class Product extends React.Component{
 
         
         var numComments = this.state.Comments.length;
-        
-
         let newComment = {
             id: numComments+1,
             commenter: String(this.state.currUser),
             commenterThumbnail: require('./carey.jpeg'),     /* this is a dummy test image, remember to delete this */
             description: this.state.workingComment,
-
         };
-
         //add comment to the array of other existing comments
         let result = await fetch('http://localhost:8080/api/newComment', {
             method: 'POST',
@@ -188,14 +197,12 @@ export default class Product extends React.Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({id: this.state.id, comment:newComment})
-        })
-        .then(response => {
+        }).then(response => {
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
             return response.json();
-        })
-        .then(data => {
+        }).then(data => {
             //add comment to the array of other existing comments
             //this.setState({ Comments: this.state.Comments.concat(data) });
             //clear the working comment to prevent adding a duplicate comment
@@ -206,16 +213,11 @@ export default class Product extends React.Component{
             console.error('There was an error with the fetch operation:', error);
         });
         //this.setState({Comments: this.state.Comments.concat(newComment)});
-
         //clear the working comment to prevent addign a duplicate comment
         //this.setState({workingComment: ""});
 
         console.log(this.state.Comments)
-
-
         window.location.reload(true);
-
-
     }
 
 
@@ -404,13 +406,13 @@ export default class Product extends React.Component{
                     { !(this.state.alreadyLiked) && 
                     <div className="likeButton" >
                         <button className="flex" onClick={() => {
-                            this.updateLikeCount();
+                            this.likePost();
                             }} > <AiOutlineHeart className="flex mr-2 mt-1" />  Liked by {this.state.likeCount} </button>
                     </div>} 
                     {/* Display filled like button */ }
                     { this.state.alreadyLiked && <div className="likeButton bg-red-500 flex" >
                         <button className="flex " onClick={() => {
-                            this.updateLikeCount();
+                            this.likePost();
                             }}> <AiFillHeart className="flex mr-2 mt-1"/>  Liked by {this.state.likeCount} </button>
                     </div>} 
 

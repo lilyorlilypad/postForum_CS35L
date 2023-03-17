@@ -119,6 +119,7 @@ exports.createPost = async (req, res, next) => {
         return res.status(404).send('No posts found.');
       }
       document.numberOfLikes = document.numberOfLikes+1;
+      console.log(document);
       const updatedPost = await document.save();
       console.log(updatedPost);
       res.json(updatedPost);

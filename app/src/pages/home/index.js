@@ -33,25 +33,32 @@ export default class Home extends Component {
 
 
             let mostsize = 0;
-            let most = 0;
-            let mostIndex = -1;
-            let added = [];
-            let randomArr = [];
+            
+            
             if (size < 4){
-                this.state.popProducts = this.state.products;
-                this.state.recentProducts = this.state.products;
+                this.setState({popProducts: this.state.products});
+                this.setState({recentProducts: this.state.products});
             }
             else {
+                console.log(this.state.products)
+                let added = [];
                 for (let j = 0; j < 4; j ++){
+                    
+                    let randomArr = [];
+                    let most = -1;
+                    let mostIndex = -1;
                     for(let i = 0; i < size; i++){
-                        if (!added.includes(i) && this.state.products[i].numberOfLikes > most){
+                        console.log(i, this.state.products[i].numberOfLikes);
+                        if (!added.includes(i) && this.state.products[i].numberOfLikes >= most){
                             mostIndex = i;
+                            console.log(mostIndex);
+                            most = this.state.products[i].numberOfLikes;
                         }
                     }
         
                     this.state.popProducts.push(this.state.products[mostIndex]);
                     added.push(mostIndex);
-                    let min = 0; let max = size;
+                    let min = 0; let max = size-1;
                     let random = Math.floor(Math.random()*(max-min+1)+min);
                     while (randomArr.includes(random)){
                         random = Math.floor(Math.random()*(max-min+1)+min);
@@ -63,6 +70,8 @@ export default class Home extends Component {
             
             
             console.log(this.state.products);
+            console.log(this.state.popProducts);
+            console.log(this.state.recentProducts);
             this.setState({loaded: true});  
         } catch (error) {
             console.error(error);
@@ -170,7 +179,7 @@ export default class Home extends Component {
                             <div className="title">Just Dropped</div>
                             <div className="content">
                                 {
-                                    this.state.recentproducts.map((opt, index) => {
+                                    this.state.recentProducts.map((opt, index) => {
                                         return <Card
                                             onClick={() => this.props.history.push(`/product/${opt._id}`)}
                                             // onClick={() => this.props.history.push('/product/:id' )}
