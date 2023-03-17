@@ -69,6 +69,8 @@ app.use('/api/v1/users', userRouter);
 app.use('/api/upload', router);
 app.use('/api/newComment', router);
 
+app.use('/api/addLike', router);
+
 
 /*
 app.all('*', (req, res, next) => {
